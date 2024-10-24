@@ -1,73 +1,80 @@
 <!DOCTYPE html>
-<head>
-    <Title>Mailroom Box Inventory</Title>
-
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-</head>
-
-<body>
-    <div id=header-background>
-        <div id="top-bar">
-            <div class="top-bar-button">
-                About
-            </div>
-            <div class="top-bar-button">
-                Contact
-            </div>
-            <div class="top-bar-button">
-                Login
-            </div>
-        </div>
-
-        <div id="title-container">
-            <div class="title">
-                <b>MAILROOM</b>
-            </div>
-            <div class="title">
-                <b>INVENTORY</b>
-            </div>
-            <div class="title">
-                <b>LIST</b>
-            </div>
-        </div>
-    </div>
-
-
+<html>
+    <head>
+        <Title>Mailroom Box Inventory</Title>
     
-    <div id=body-background>
-        <div class="box-title">
-            USPS
-        </div>
-
-        <div class="side-by-side-container">
-            <div class="box-photo-container">
-                <img src="/images/USPS_box.png" alt="Wrong file path">
+        <link rel="stylesheet" href="style.css">
+        <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    </head>
+    
+    <body>
+        <div id=header-background>
+            <div id="top-bar">
+                <div class="top-bar-button">
+                    <a href="/">Home</a>
+                </div>
+                <div class="top-bar-button">
+                    <a href="about.html" target="_blank">About</a>
+                </div>
+                <div class="top-bar-button">
+                    <a href="contact.html" target="_blank">Contact</a>
+                </div>
+                <div class="top-bar-button">
+                    <a href="login.html" target="_blank">Login</a>
+                </div>
             </div>
-            <div class="box-info-container">
-                Name of box, # of boxes remaining, Size of box, Link to purchase more boxes.
+    
+            <div id="title-container">
+                <div class="title">
+                    <b>MAILROOM</b>
+                </div>
+                <div class="title">
+                    <b>INVENTORY</b>
+                </div>
+                <div class="title">
+                    <b>LIST</b>
+                </div>
             </div>
         </div>
-
-
-        <div class="box-title">
-            FedEx
+    
+        <div class="barcode">
+            <input type="text" placeholder="Input Barcode...">
         </div>
-
-        <div class="side-by-side-container">
-            <div class="box-photo-container">
-                <img src="/images/USPS_box.png" alt="Wrong file path">
+        
+        <div id=body-background>
+            <div class="box-title">
+                USPS
             </div>
-            <div class="box-info-container">
-                Name of box, # of boxes remaining, Size of box, Link to purchase more boxes.
+    
+            <div class="side-by-side-container">
+                <div class="box-photo-container">
+                    <img src="/images/USPS_box.png" alt="Wrong file path">
+                </div>
+                <div class="box-info-container">
+                    Name of box, # of boxes remaining, Size of box, Link to purchase more boxes.
+                </div>
             </div>
+    
+    
+            <div class="box-title">
+                FedEx
+            </div>
+    
+            <div class="side-by-side-container">
+                <div class="box-photo-container">
+                    <img src="/images/USPS_box.png" alt="Wrong file path">
+                </div>
+                <div class="box-info-container">
+                    Name of box, # of boxes remaining, Size of box, Link to purchase more boxes.
+                </div>
+            </div>
+    
+    
+    
+    
+    
         </div>
-
-
-
-
-
-    </div>
-
-</body>
+    
+    </body>
+</html>
