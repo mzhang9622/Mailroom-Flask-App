@@ -3,7 +3,6 @@
     /* --link-color:  */
 }
 
-
 body{
     margin: 0px;
 }
@@ -33,16 +32,63 @@ body{
     cursor:pointer;
 }
 
+.opening-side-by-side-container{ 
+    /* display: flex;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+    text-align: left; */
+
+    display: flex;      
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+}
+
 #title-container{
     margin-left: 5vw;
-    margin-top: 5vh;
-    padding-bottom: 35vh;
+    /* margin-top: 5vw; */
+    padding-bottom: 10vh;
 }
 
 .title{
     color: white;
-    font-size: 15vh;
+    font-size: 10vw;
     font-family: "Libre Franklin";
+}
+
+#mule-photo-container{
+    height: auto;
+    flex: display;
+    justify-content: center;
+    width: 40vw;
+    height: auto;
+}
+
+#mule-photo-container img{
+    width: 100%;
+    height: auto;
+    /* justify-content: center; */
+    align-content: center;
+
+}
+
+#barcode{
+    width: 100%;
+    padding-left: 5vw;
+    padding-bottom: 25vh;
+}
+
+#barcode-text{
+    width: 60vw;
+    height: 3vh;
+    background: rgb(174, 173, 173);
+    color: black;
+}
+
+#barcode-text::placeholder{
+    width: 60vw;
+    color: black;
 }
 
 .box-title{
@@ -55,7 +101,7 @@ body{
     font-family: "Inter";
 }
 
-.side-by-side-container{ 
+.box-side-by-side-container{ 
     display: flex;
     justify-content: flex-start;
     width: 100%;
@@ -83,9 +129,76 @@ body{
     width: 57vw;
 }
 
-
-
-
 #body-background{
     background: rgb(224, 224, 224);
 }
+
+
+
+/*Beginning of login methods*/
+#login-background{
+    height: 100%;
+    background: linear-gradient(to right, rgb(124,221,254),rgb(22,28,89));
+}
+
+#login-block-container{
+    width: 100vw;
+    height: 100vh;
+    margin-left: 15%;
+    margin-top: 5%;
+}
+
+#login-block{
+    width: 70vw;
+    height: 80vh;
+    background: white;
+    text-align: center;
+}
+
+#login-title{
+    color: blue;
+    padding-top: 6%;
+    font-size: 3vw;
+    line-height: 0;
+}
+
+#login-instructions{
+    /* background: red; */
+    font-size: 1vw;
+    margin-top: 0px;
+    line-height: 1;
+}
+
+#login-input-container{
+    margin-top: 0%;
+}
+
+.login-input-box{
+    width: 100%;
+}
+
+
+#login-input-text{
+    width: 80%;
+    height: 3vw;
+    background: rgb(174, 173, 173);
+    color: black;
+    margin-top: 5%;
+}
+
+#login-input-text::placeholder{
+    color: black
+}
+
+#login-button{
+    margin-top: 5%;
+    cursor: pointer;
+    width: 80%;
+    height: 4vw;
+    background: blue;
+    color: white;
+    font-size: 2vw;
+    font-weight: 600;
+    margin-bottom: 2vw;
+}
+
