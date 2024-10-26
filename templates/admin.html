@@ -3,7 +3,7 @@
     <head>
         <Title>Mailroom Box Inventory</Title>
     
-        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="/static/style.css">
         <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;700&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     </head>
@@ -15,13 +15,13 @@
                     <a href="/">Home</a>
                 </div>
                 <div>
-                    <a href="about.html">About</a>
+                    <a href="/about">About</a>
                 </div>
                 <div>
-                    <a href="contact.html">Contact</a>
+                    <a href="/contact">Contact</a>
                 </div>
                 <div>
-                    <a href="login.html">Login</a>
+                    <a href="/login">Login</a>
                 </div>
             </div>
 
@@ -38,7 +38,7 @@
                     </div>
                 </div>
                 <div id="mule-photo-container">
-                    <img src="/images/mule.png" alt="Wrong file path">
+                    <img src="{{ url_for('static', filename='images/mule.png') }}" alt="Wrong file path">
                 </div>
             </div>
 
@@ -54,8 +54,12 @@
     
             <div class="box-side-by-side-container">
                 <div class="box-photo-container">
-                    <img src="/images/USPS_box.png" alt="Wrong file path">
+                    <img src="{{ url_for('static', filename='images/USPS_box.png') }}" alt="Wrong file path">
                 </div>
+                <form>
+                    <label for="num-boxes-1">Enter # boxes to + or - </label>
+                    <input type="number" id="num-boxes-1" placeholder="Number of boxes">
+                </form>
                 <div class="box-info-container">
                     Name of box, # of boxes remaining, Size of box, Link to purchase more boxes.
                 </div>
@@ -68,8 +72,12 @@
     
             <div class="box-side-by-side-container">
                 <div class="box-photo-container">
-                    <img src="/images/USPS_box.png" alt="Wrong file path">
+                    <img src="{{ url_for('static', filename='images/USPS_box.png') }}" alt="Wrong file path">
                 </div>
+                <form>
+                    <label for="num-boxes-2">Enter # boxes to + or - </label>
+                    <input type="number" id="num-boxes-2" placeholder="Number of boxes">
+                </form>
                 <div class="box-info-container">
                     Name of box, # of boxes remaining, Size of box, Link to purchase more boxes.
                 </div>
@@ -80,6 +88,8 @@
     
     
         </div>
+
+        
     
     </body>
 </html>
