@@ -26,15 +26,8 @@ body{
 }
 
 #header-background{
-    background: radial-gradient(circle at 0% 10%, blue, transparent 35%),
-    radial-gradient(circle at 10% 25%, rgb(140, 188, 43), transparent 40%),
-    radial-gradient(circle at 25% 40%, rgb(29, 165, 31), transparent 40%),
-    radial-gradient(circle at 40% 55%, rgb(203, 64, 175), transparent 45%),
-    radial-gradient(circle at 55% 70%, rgb(155, 6, 96), transparent 50%),
-    radial-gradient(circle at 70% 85%, rgb(22, 64, 92), transparent 55%),
-    radial-gradient(circle at 85% 100%, rgb(9, 51, 25), transparent 80%);
-    width: 100vw;
-    /* height: 70vh; */
+    background-image: url(/images/main_background.png);
+    background-size: cover;
 }
 
 .top-bar{
