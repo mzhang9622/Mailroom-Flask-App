@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <Title>Mailroom Box Inventory</Title>
+    
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    </head>
+    
+    <body>
+        <div id=header-background>
+            <div class="top-bar">
+                <div>
+                    <a href="/">Home</a>
+                </div>
+                <div>
+                    <a href="/about">About</a>
+                </div>
+                <div>
+                    <a href="/contact">Contact</a>
+                </div>
+                <div>
+                    <a href="/login">Login</a>
+                </div>
+            </div>
+
+            <div class="opening-side-by-side-container">
+                <div id="title-container">
+                    <div class="title">
+                        <b>MAILROOM</b>
+                    </div>
+                    <div class="title">
+                        <b>INVENTORY</b>
+                    </div>
+                    <div class="title">
+                        <b>LIST</b>
+                    </div>
+                </div>
+                <div id="mule-photo-container">
+                    <img src="{{ url_for('static', filename='images/mule.png') }}" alt="Wrong file path">
+                </div>
+            </div>
+
+            <div id="barcode">
+                <input id="barcode-text" type="text" placeholder="Input Barcode...">
+            </div>
+        </div>
+        
+        <div id=body-background>
+            <div class="box-title">
+                USPS
+            </div>
+    
+            <div class="box-side-by-side-container">
+                <div class="box-photo-container">
+                    <img src="{{ url_for('static', filename='images/USPS_box.png') }}" alt="Wrong file path">
+                </div>
+                <div class="box-info-container">
+                    Name of box, # of boxes remaining, Size of box, Link to purchase more boxes.
+                </div>
+            </div>
+    
+    
+            <div class="box-title">
+                FedEx
+            </div>
+    
+            <div class="box-side-by-side-container">
+                <div class="box-photo-container">
+                    <img src="{{ url_for('static', filename='images/USPS_box.png') }}" alt="Wrong file path">
+                </div>
+                <div class="box-info-container">
+                    Name of box, # of boxes remaining, Size of box, Link to purchase more boxes.
+                </div>
+            </div>
+    
+    
+    
+    
+    
+        </div>
+    
+    </body>
+</html>
