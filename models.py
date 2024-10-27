@@ -17,8 +17,13 @@ class User(db.Model, UserMixin):
 
 class Box(db.Model):
     id = db.Column(db.Integer, primary_key = True)
-    name = db.Column(db.String(200), nullable = False)
+    name = db.Column(db.String(200), nullable = False, unique = True)
     quantity = db.Column(db.Integer, nullable = False)
     size = db.Column(db.String(200), nullable = False)
     link = db.Column(db.String(200), nullable = False)
     image = db.Column(db.String(200), nullable = False)
+
+    def update_attributes(self, size, link, image):
+        self.size = size
+        self.link = link
+        self.image = image

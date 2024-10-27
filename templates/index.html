@@ -51,38 +51,25 @@
         </div>
         
         <div id=body-background>
-            <div class="box-title">
-                USPS
-            </div>
-    
-            <div class="box-side-by-side-container">
-                <div class="box-photo-container">
-                    <img src="{{ url_for('static', filename='images/USPS_box.png') }}" alt="Wrong file path">
+            <ul>
+                {% for box in boxes %}
+                <div class="box-title">
+                    {{ box.name }}
                 </div>
-                <div class="box-info-container">
-                    Name of box, # of boxes remaining, Size of box, Link to purchase more boxes.
+        
+                <div class="box-side-by-side-container">
+                    <div class="box-photo-container">
+                        <img src="{{ url_for('static', filename='images/mule.png') }}" alt="Wrong file path">
+                    </div>
+                    <div class="box-info-container">
+                        Name: {{ box.name }}<br>
+                        Quantity: {{ box.quantity }}<br>
+                        Size: {{ box.size }}<br>
+                        Link: {{ box.link }}
+                    </div>
                 </div>
-            </div>
-    
-    
-            <div class="box-title">
-                FedEx
-            </div>
-    
-            <div class="box-side-by-side-container">
-                <div class="box-photo-container">
-                    <img src="{{ url_for('static', filename='images/USPS_box.png') }}" alt="Wrong file path">
-                </div>
-                <div class="box-info-container">
-                    Name of box, # of boxes remaining, Size of box, Link to purchase more boxes.
-                </div>
-            </div>
-    
-    
-    
-    
-    
+                {% endfor %}
+            </ul>
         </div>
-    
     </body>
 </html>
