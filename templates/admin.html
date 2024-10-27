@@ -51,48 +51,29 @@
         </div>
         
         <div id=body-background>
-            <div class="box-title">
-                USPS
-            </div>
-    
-            <div class="box-side-by-side-container">
-                <div class="box-photo-container">
-                    <img src="{{ url_for('static', filename='images/USPS_box.png') }}" alt="Wrong file path">
+            <ul>
+                {% for box in boxes %}
+                <div class="box-title">
+                    {{ box.name }}
                 </div>
-                <form>
-                    <label for="num-boxes-1">Enter # boxes to + or - </label>
-                    <input type="number" id="num-boxes-1" placeholder="Number of boxes">
-                </form>
-                <div class="box-info-container">
-                    Name of box, # of boxes remaining, Size of box, Link to purchase more boxes.
-                </div>
-            </div>
-    
-    
-            <div class="box-title">
-                FedEx
-            </div>
-    
-            <div class="box-side-by-side-container">
-                <div class="box-photo-container">
-                    <img src="{{ url_for('static', filename='images/USPS_box.png') }}" alt="Wrong file path">
-                </div>
-                <form>
-                    <label for="num-boxes-2">Enter # boxes to + or - </label>
-                    <input type="number" id="num-boxes-2" placeholder="Number of boxes">
-                </form>
-                <div class="box-info-container">
-                    Name of box, # of boxes remaining, Size of box, Link to purchase more boxes.
-                </div>
-            </div>
-    
-    
-    
-    
-    
-        </div>
-
         
-    
+                <div class="box-side-by-side-container">
+                    <div class="box-photo-container">
+                        <img src="{{ url_for('static', filename='images/mule.png') }}" alt="Wrong file path">
+                    </div>
+                    <form method="POST">
+                        <input type="number" placeholder="Enter # boxes to + or -" name="quantity">
+                        <input type="submit" value="submit">
+                    </form>
+                    <div class="box-info-container">
+                        Name: {{ box.name }}<br>
+                        Quantity: {{ box.quantity }}<br>
+                        Size: {{ box.size }}<br>
+                        Link: {{ box.link }}
+                    </div>
+                </div>
+                {% endfor %}
+            </ul>
+        </div>
     </body>
 </html>

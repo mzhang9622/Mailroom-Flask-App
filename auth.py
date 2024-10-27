@@ -9,19 +9,22 @@ auth_blueprint = Blueprint('auth', __name__)
 @auth_blueprint.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        username = request.form['username']
+        email = request.form['email']
         password = request.form['password']
         
-        user = User.query.filter_by(username=username).first()
+        user = User.query.filter_by(email=email).first()
         if user and user.check_password(password):
             login_user(user)
-            return redirect(url_for('main.index'))
+            return redirect(url_for('main.admin'))
         
     return render_template('login.html')
 
 
-@auth_blueprint.route('/logout')
+@auth_blueprint.route('/logout', methods=['GET', 'POST'])
 @login_required
 def logout():
-    logout_user()
-    return redirect(url_for('auth.login'))
+    if request.method == 'POST':
+        logout_user()
+        return redirect(url_for('main.index'))
+        
+    return render_template('logout.html')
