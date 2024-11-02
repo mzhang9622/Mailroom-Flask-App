@@ -47,17 +47,21 @@
                     <div class="login-input-container">
                         <form method="POST">
                             <div>
-                                <input type="text" placeholder="email" name="email">
+                                <input type="text" class="login-input-text" placeholder="email" name="email">
                             </div>
-                            <div>
-                                <input type="password" placeholder="password" name="password"> 
+                            <div class = "password-container">
+                                <input type="password" class = "password-input-text" placeholder="password" name="password" onclick = "togglePassword()"> 
+                               
+                                <button type = "button"  id = "show-password">
+                                    <img src = "./static/images/eye-slash-regular.svg" alt = "Show Password"/>
+                                </button>
                             </div>
-                            <input type="submit" value="Login">
+                            <input type="submit" class ="submit_button" value="Login">
                         </form>
 
                         <div id="login-input-container">
                             Forgot your password? 
-                            <a href="reset.html" target="_blank">Click here to reset.</a>
+                            <a href="reset.html" target="_blank" class = "underline">Click here to reset.</a>
                         </div>
                         
                     </div>
@@ -66,8 +70,25 @@
             </div>
 
 
-
-
         </div>
+        <script>
+            function togglePassword() {
+                const show_button = document.querySelector('#show-password')
+                const show_password_icon = show_button.querySelector('img')
+                const password_input = document.querySelector('.password-input-text')
+
+
+                show_button.addEventListener('click', () => {
+                if (password_input.type === 'password') {
+                    password_input.type = 'text';
+                    show_password_icon.src = './static/images/eye-regular.svg';
+                } else {
+                    password_input.type = 'password';
+                    show_password_icon.src = './static/images/eye-slash-regular.svg';
+                }
+                })
+
+            }
+        </script>
     </body>
 </html>
