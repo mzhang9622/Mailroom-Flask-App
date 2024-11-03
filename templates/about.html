@@ -17,7 +17,11 @@
                 <a href="/contact">Contact</a>
             </div>
             <div>
-                <a href="/login">Login</a>
+                {% if admin == True %}
+                    <a href="/logout">Logout</a>
+                    {% else %}
+                    <a href="/login">Login</a>
+                    {% endif %}
             </div>
         </div>
 

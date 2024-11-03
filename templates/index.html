@@ -6,6 +6,7 @@
         <link rel="stylesheet" href="/static/style.css">
         <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;700&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     </head>
     
     <body>
@@ -21,13 +22,17 @@
                     <a href="/contact">Contact</a>
                 </div>
                 <div>
+                    {% if admin == True %}
+                    <a href="/logout">Logout</a>
+                    {% else %}
                     <a href="/login">Login</a>
+                    {% endif %}
                 </div>
             </div>
 
             <div class="opening-side-by-side-container">
                 <div id = "background-photo-container">
-                    <img src="{{ url_for('static', filename='images/main_background.png') }}" alt="background">
+                    <img src="/static/images/main_background.png" alt="Wrong file path">
                 </div>
                 <div id="title-container">
                     <div class="title">
@@ -41,7 +46,7 @@
                     </div>
                 </div>
                 <div id="mule-photo-container">
-                    <img src="{{ url_for('static', filename='images/mule.png') }}" alt="Wrong file path">
+                    <img src="/static/images/mule.png" alt="Wrong file path">
                 </div>
             </div>
 
@@ -59,8 +64,14 @@
         
                 <div class="box-side-by-side-container">
                     <div class="box-photo-container">
-                        <img src="{{ url_for('static', filename='images/mule.png') }}" alt="Wrong file path">
+                        <img src="/static/images/{{  box.image }}" alt="Wrong file path">
                     </div>
+                    {% if admin == True %}
+                    <form method = "POST", action="{{ url_for('main.update', box_id=box.id) }}">
+                        <input type="number" placeholder="Enter # boxes to + or -" name="quantity">
+                        <input type="submit" value="Submit">
+                    </form>
+                    {% endif %}
                     <div class="box-info-container">
                         Name: {{ box.name }}<br>
                         Quantity: {{ box.quantity }}<br>
