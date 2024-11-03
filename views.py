@@ -66,10 +66,13 @@ def login():
 @login_required
 def update(box_id):
     if request.method == 'POST':
-        print("hi")
         box = Box.query.get(box_id)
         quantity = request.form['quantity']
-        box.quantity = quantity
+        box.quantity = box.quantity + int(quantity)
+
+        if box.quantity < 0:
+            box.quantity = 0
+
         db.session.commit()
 
     return redirect(url_for('main.index'))

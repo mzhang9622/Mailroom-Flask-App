@@ -68,7 +68,7 @@
                     </div>
                     {% if admin == True %}
                     <form method = "POST", action="{{ url_for('main.update', box_id=box.id) }}">
-                        <input type="number" placeholder="Enter # boxes to + or -" name="quantity">
+                        <input type="number" placeholder="Enter # to + or -" name="quantity">
                         <input type="submit" value="Submit">
                     </form>
                     {% endif %}
