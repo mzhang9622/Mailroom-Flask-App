@@ -8,9 +8,7 @@ main_blueprint = Blueprint('main', __name__)
 
 @main_blueprint.route("/")
 def index():
-    if current_user.is_authenticated and current_user.email:
-        return render_template('admin.html', boxes = Box.query.all())
-    
+    #this is very temporary
     if not User.query.filter_by(email = "cyu25@colby.edu").all():
         claire = User(email = "cyu25@colby.edu", password_hash = generate_password_hash("claire"))
         db.session.add(claire)
@@ -38,28 +36,40 @@ def index():
                 Box.query.filter_by(name = row[0]).first().update_attributes(size = row[1], link = row[2], image = row[3])
                 db.session.commit()
 
-    return render_template('index.html', boxes = Box.query.all())
+    if current_user.is_authenticated and current_user.email:
+        return render_template('index.html', boxes = Box.query.all(), admin = True)
+
+    return render_template('index.html', boxes = Box.query.all(), admin = False)
 
 @main_blueprint.route("/about")
-def about(): 
-    return render_template('about.html')
+def about():
+    if current_user.is_authenticated and current_user.email:
+        return render_template('about.html', admin = True)
+    
+    return render_template('about.html', admin = False)
 
 @main_blueprint.route("/contact")
-def contact(): 
-    return render_template('contact.html')
+def contact():
+    if current_user.is_authenticated and current_user.email:
+        return render_template('contact.html', admin = True)
+    
+    return render_template('contact.html', admin = False)
 
 @main_blueprint.route('/login')
 def login():
    if current_user.is_authenticated and current_user.email:
-        return redirect(url_for('auth.logout'))
+        return render_template('index.html', boxes = Box.query.all(), admin = True)
    
    return render_template('login.html')
 
-@main_blueprint.route('/admin', methods=['GET', 'POST'])
+@main_blueprint.route('/update/<int:box_id>', methods=['GET', 'POST'])
 @login_required
-def admin():
+def update(box_id):
     if request.method == 'POST':
+        print("hi")
+        box = Box.query.get(box_id)
         quantity = request.form['quantity']
-        print(quantity)
-        
-    return render_template('admin.html', boxes = Box.query.all())
+        box.quantity = quantity
+        db.session.commit()
+
+    return redirect(url_for('main.index'))
