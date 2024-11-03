@@ -15,16 +15,13 @@ def login():
         user = User.query.filter_by(email=email).first()
         if user and user.check_password(password):
             login_user(user)
-            return redirect(url_for('main.admin'))
+            return redirect(url_for('main.index'))
         
     return render_template('login.html')
 
 
-@auth_blueprint.route('/logout', methods=['GET', 'POST'])
+@auth_blueprint.route('/logout')
 @login_required
 def logout():
-    if request.method == 'POST':
-        logout_user()
-        return redirect(url_for('main.index'))
-        
-    return render_template('logout.html')
+    logout_user()
+    return redirect(url_for('main.index'))
