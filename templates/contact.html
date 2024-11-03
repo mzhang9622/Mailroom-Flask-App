@@ -29,6 +29,7 @@
 
         <div class="contact">
             <form action="https://api.web3forms.com/submit" method="POST">
+                {% comment %} API Key should be hidden {% endcomment %}
                 <input type="hidden" name="access_key" value="63fe182b-03a2-45f9-ad55-81b05e6123a6">
                 <label for="name">Name</label>
                 <input type="text" id="name" name="name" placeholder="Your Name" class="contact-inputs" required>
@@ -43,7 +44,7 @@
                     <button id="submitButton" type="submit">Send Message</button>
 
 
-                </form>
+            </form>
             </div>
         </div>
     </body>
