@@ -171,14 +171,14 @@ body{
 }
 
 
-.login-block-container{
+.login-block-container, #about-block-container{
     width: 100vw;
     height: 100vh;
     margin-left: 15%;
     margin-top: 5%;
 }
 
-#login-block{
+#login-block, #about-block{
     width: 70vw;
     height: 80vh;
     background: white;
@@ -292,7 +292,7 @@ body{
     gap: 50px;
 }
 
-#contact-background{
+#contact-background, #about-background{
     background: linear-gradient(to right, rgb(124,221,254),rgb(22,28,89));
     height: 100vh;
 }
@@ -333,4 +333,32 @@ footer {
     left: 0;
     font-size: 14px;
     color: #555;
+}
+
+
+/* About page methods */
+
+#about-title{
+    align-items: center;
+    text-align: center;
+    font-family: "Libre Franklin";
+    color: blue;
+    padding-top: 25px;
+    font-size: 2vw;
+}
+
+.about-info-header{
+    text-align: left;
+    font-family: "Libre Franklin";
+    padding-left: 5%;
+    padding-top: 25px;
+    font-size: 2vw;
+}
+
+.about-info-list{
+    text-align: left;
+    font-family: "Libre Franklin";
+    padding-left: 10%;
+    /* padding-top: 25px; */
+    font-size: 2vw;
 }

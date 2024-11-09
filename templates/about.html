@@ -6,27 +6,63 @@
     </head>
 
     <body>
-        <div class="top-bar">
-            <div>
-                <a href="/">Home</a>
-            </div>
-            <div>
-                <a href="/about">About</a>
-            </div>
-            <div>
-                <a href="/contact">Contact</a>
-            </div>
-            <div>
-                {% if admin == True %}
-                    <a href="/logout">Logout</a>
-                    {% else %}
-                    <a href="/login">Login</a>
-                    {% endif %}
-            </div>
-        </div>
+        <div id="about-background">
 
-        <div class="about">
-            This is the about page.
+            <div class="top-bar">
+                <div>
+                    <a href="/">Home</a>
+                </div>
+                <div>
+                    <a href="/about">About</a>
+                </div>
+                <div>
+                    <a href="/contact">Contact</a>
+                </div>
+                <div>
+                    {% if admin == True %}
+                        <a href="/logout">Logout</a>
+                        {% else %}
+                        <a href="/login">Login</a>
+                        {% endif %}
+                </div>
+            </div>
+    
+            <div class="about">
+                <div id="about-block-container">
+                    <div id="about-block">
+                        <div id="about-title">
+                            <h1>ABOUT THE MAILROOM</h1>
+                        </div>
+
+
+                        <div class="about-info-header">
+                            <h3>Mule Mail Center (Student Mail and Packages)</h3>
+                        </div>
+                        <div class="about-info-list">
+                            <ul>
+                                <li>Location: Cotter Union, Main Level</li>
+                                <li>Hours: Monday-Friday, 8:00AM-4:00PM</li>
+                                <li>Phone: 207-859-4060</li>
+                                <li>Email: packages@colby.edu</li>
+                            </ul>
+                        </div>
+
+                        <div class="about-info-header">
+                            <h3>Mail Service Center (Outgoing Mail and Packages)</h3>
+                        </div>
+                        <div class="about-info-list">
+                            <ul>
+                                <li>Location: Cotter Union, Bookstore Lower Level</li>
+                                <li>Hours: Monday-Friday, 8:00AM-4:00PM</li>
+                                <li>Phone: 207-859-4050</li>
+                                <li>Fax: 207-859-4055</li>
+                                <li>Email: mail@colby.edu</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
     </body>
