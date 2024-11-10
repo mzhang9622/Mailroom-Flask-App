@@ -1,5 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for
-from flask import request
+from flask import Blueprint, render_template, redirect, url_for, request, flash
 from models import db, User
 from flask_login import login_user, login_required, logout_user
 
@@ -16,8 +15,9 @@ def login():
         if user and user.check_password(password):
             login_user(user)
             return redirect(url_for('main.index'))
-        
-    return render_template('login.html')
+        else:
+            flash('Invalid username or password')
+            return redirect(url_for('auth.login'))
 
 
 @auth_blueprint.route('/logout')

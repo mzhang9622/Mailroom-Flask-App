@@ -50,21 +50,13 @@
                 </div>
             </div>
 
+            <div id="barcode">
+                <input id="barcode-text" type="text" placeholder="Input Barcode...">
+            </div>
         </div>
         
         <div id=body-background>
             <ul>
-                {% if admin == True %}
-                <div class="barcode-input">
-                    <label for="barcode-text"><b>Scan Box Barcode Here</b></label>
-                    <div class = "barcode_container">
-                        <input id="barcode-text" type="text">
-                        <input type="submit" class ="scan_button" value="Scan">
-                    </div>
-                </div>
-                {% endif %}
-                
-
                 {% for box in boxes %}
                 <div class="box-title">
                     {{ box.name }}
@@ -75,9 +67,9 @@
                         <img src="/static/images/{{  box.image }}" alt="Wrong file path">
                     </div>
                     {% if admin == True %}
-                    <form method = "POST", action="{{ url_for('main.update', box_id=box.id) }}">
-                        <input type="number" placeholder="Enter # to + or -" name="quantity">
-                        <input type="submit" value="Submit">
+                    <form method = "POST", action = "{{ url_for('main.update_box', box_id = box.id) }}">
+                        <input type = "number" placeholder = "Enter # to + or -" name = "quantity">
+                        <input type = "submit" value = "Submit">
                     </form>
                     {% endif %}
                     <div class="box-info-container">
@@ -86,9 +78,39 @@
                         Size: {{ box.size }}<br>
                         Link: {{ box.link }}
                     </div>
+                    {% if admin == True %}
+                    <form method = "POST", action = "{{ url_for('main.delete_box', box_id = box.id) }}">
+                        <input type = "submit" value = "Delete Box">
+                    </form>
+                    {% endif %}
                 </div>
                 {% endfor %}
             </ul>
+        </div>
+
+        <div id = body-background>
+            {% if admin == True %}
+            Add New Box</br>
+            <form method = "POST", action = "{{ url_for('main.add_box')}}", enctype = "multipart/form-data">
+                <input type = "text" placeholder = "Name" name = "name"></br>
+                <input type = "text" placeholder = "Size" name = "size"></br>
+                <input type = "text" placeholder = "Link" name = "link"></br>
+                Image:</br>
+                <input type = "file" name = "image" accept = "image/*" required></br>
+                <input type = "submit" value = "Submit">
+            </form>
+            {% endif %}
+        </div>
+
+        <div id = body-background>
+            {% if admin == True %}
+            Add New Admin</br>
+            <form method = "POST", action = "{{ url_for('main.add_user')}}"></br>
+                <input type = "text" placeholder = "Email" name = "email"></br>
+                <input type = "text" placeholder = "Password" name = "password"> </br>
+                <input type = "submit" value = "Submit">
+            </form>
+            {% endif %}
         </div>
     </body>
 </html>
