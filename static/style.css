@@ -101,22 +101,61 @@ body{
 
 }
 
-#barcode{
+.barcode-input{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
     width: 100%;
     padding-left: 5vw;
     padding-bottom: 6vh;
+    padding-top: 10vh;
+    
+}
+
+.barcode-input label{
+    margin-bottom: 8px;
+    font-size: 20px;
+    font-family: "Libre Franklin";
 }
 
 #barcode-text{
-    width: 60vw;
-    height: 3vh;
-    background: rgb(174, 173, 173);
-    color: black;
+    width: 60vw;               
+    height: 4vh;             
+    color: black;             
+    font-size: 16px;          
+    border: 2px solid rgb(209, 209, 209);
+    border-radius: 5px;       
+    padding: 5px;  
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+    font-family: "Libre Franklin";
+    transition: box-shadow 0.3 ease, transform 0.2 ease;
 }
 
+#barcode-text:focus {
+    outline: none; 
+    border-color: blue; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    transform: translateY(-2px);
+}
 #barcode-text::placeholder{
     width: 60vw;
     color: black;
+}
+
+.barcode_container{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.scan_button{
+    width: 10%;               
+    height: 4vh; 
+    cursor: pointer;
+    max-width:400px;
+    background: blue;
+    color: white;
+    font-weight: 600;
 }
 
 .box-title{
@@ -171,14 +210,14 @@ body{
 }
 
 
-.login-block-container, #about-block-container{
+.login-block-container, #about-block-container, #reset-block-container{
     width: 100vw;
     height: 100vh;
     margin-left: 15%;
     margin-top: 5%;
 }
 
-#login-block, #about-block{
+#login-block, #about-block, #reset-block{
     width: 70vw;
     height: 80vh;
     background: white;
@@ -292,7 +331,7 @@ body{
     gap: 50px;
 }
 
-#contact-background, #about-background{
+#contact-background, #about-background, #reset-background{
     background: linear-gradient(to right, rgb(124,221,254),rgb(22,28,89));
     height: 100vh;
 }
@@ -360,5 +399,22 @@ footer {
     font-family: "Libre Franklin";
     padding-left: 10%;
     /* padding-top: 25px; */
+    font-size: 2vw;
+}
+
+/* Reset page methods */
+#reset-title{
+    align-items: center;
+    text-align: center;
+    font-family: "Libre Franklin";
+    color: blue;
+    padding-top: 25px;
+    font-size: 2vw;
+}
+
+.reset-info-header{
+    text-align: center;
+    font-family: "Libre Franklin";
+    padding-top: 25px;
     font-size: 2vw;
 }

@@ -14,7 +14,8 @@ Initial creation of web application requested by the Mailroom Center at Colby Co
 
 2. Create the virtual environment:
 python3 -m venv venv
-source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
+source venv/bin/activate  
+# On Windows, use `venv\Scripts\activate`
 
 3. Run the website:
 `python / python3 website.py`
