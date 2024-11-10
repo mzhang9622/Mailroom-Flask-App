@@ -50,13 +50,17 @@
                 </div>
             </div>
 
-            <div id="barcode">
-                <input id="barcode-text" type="text" placeholder="Input Barcode...">
-            </div>
         </div>
         
         <div id=body-background>
             <ul>
+                {% if admin == True %}
+                <div class="barcode-input">
+                    <input id="barcode-text" type="text" placeholder="Scan Barcode Here!">
+                </div>
+                {% endif %}
+                
+
                 {% for box in boxes %}
                 <div class="box-title">
                     {{ box.name }}

@@ -62,6 +62,11 @@ def login():
    
    return render_template('login.html')
 
+
+@main_blueprint.route('/reset')
+def reset():
+   return render_template('reset.html')
+
 @main_blueprint.route('/update/<int:box_id>', methods=['GET', 'POST'])
 @login_required
 def update(box_id):
