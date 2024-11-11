@@ -131,10 +131,13 @@
                 {% endfor %}
                 {% if admin == True %}
                 {% for user in users %}
-                {{ user.email }}</br>
-                <form method = "POST", action = "{{ url_for('main.delete_admin', user_id = user.id) }}">
-                    <input type = "submit" value = "Delete Admin">
-                </form>
+                <div class = "delete-border-container">
+                    <b>Delete Admin?</b>
+                    {{ user.email }}
+                    <form method = "POST", action = "{{ url_for('main.delete_admin', user_id = user.id) }}">
+                        <input type = "submit" value = "🗑️">
+                    </form>
+                </div>
                 {% endfor %}
                 {% endif %}
             </ul>
