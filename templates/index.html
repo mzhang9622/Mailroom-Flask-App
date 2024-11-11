@@ -70,6 +70,7 @@
                         <b>Add New Box</b></br>
                         <form method = "POST", action = "{{ url_for('main.add_box')}}", enctype = "multipart/form-data">
                             <input type = "text" placeholder = "Name" name = "name" required>
+                            <input type = "number" placeholder = "Quantity" name = "quantity" required>
                             <input type = "text" placeholder = "Size" name = "size" required>
                             <input type = "text" placeholder = "Link" name = "link" required>
                             <input type = "number" placeholder = "Low Stock #" name = "low_stock" required></br>
