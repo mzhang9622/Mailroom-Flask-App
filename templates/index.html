@@ -49,14 +49,19 @@
                     <img src="/static/images/mule.png" alt="Wrong file path">
                 </div>
             </div>
-
-            <div id="barcode">
-                <input id="barcode-text" type="text" placeholder="Input Barcode...">
-            </div>
         </div>
         
         <div id=body-background>
             <ul>
+                {% if admin == True %}
+                <div class="barcode-input">
+                    <label for="barcode-text"><b>Scan Box Barcode Here</b></label>
+                    <div class = "barcode_container">
+                        <input id="barcode-text" type="text">
+                        <input type="submit" class ="scan_button" value="Scan">
+                    </div>
+                </div>
+                {% endif %}
                 {% for box in boxes %}
                 <div class="box-title">
                     {{ box.name }}
