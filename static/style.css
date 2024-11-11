@@ -291,7 +291,7 @@ body{
 /*Beginning of login methods*/
 
 #login-background{
-    height: 100%;
+    width: 100%;
     background: linear-gradient(to right, rgb(124,221,254),rgb(22,28,89));
 }
 
@@ -299,7 +299,7 @@ body{
 .login-block-container, #about-block-container, #reset-block-container{
     width: 100vw;
     height: 100vh;
-    margin-left: 15%;
+    padding-left: 15%;
     margin-top: 5%;
 }
 
