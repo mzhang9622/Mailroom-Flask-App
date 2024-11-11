@@ -69,7 +69,7 @@ def update_box(box_id):
         if box.quantity < 0:
             box.quantity = 0
 
-        if box.quantity <= 20:
+        if box.quantity <= box.low_stock:
             flash(f'WARNING: Box {box.name} is low in stock!', 'warning')
 
 
@@ -95,9 +95,9 @@ def add_box():
         size = request.form['size']
         link = request.form['link']
         image = request.files['image']
-        
         image.save("static/images/" + image.filename)
-        box = Box(name = name, quantity = 0, size = size, link = link, image = image.filename)
+        low_stock = request.form['low_stock']
+        box = Box(name = name, quantity = 0, size = size, link = link, image = image.filename, low_stock = low_stock)
         db.session.add(box)
         db.session.commit()
 
