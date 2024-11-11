@@ -68,9 +68,11 @@ def update_box(box_id):
 
         if box.quantity < 0:
             box.quantity = 0
-
-        if box.quantity <= box.low_stock:
-            flash(f'WARNING: Box {box.name} is low in stock!', 'warning')
+        
+        boxes = Box.query.all()
+        for box in boxes: 
+            if box.quantity <= box.low_stock:
+                flash(f'WARNING: {box.name} is low in stock!', 'warning')
 
 
         db.session.commit()
@@ -109,13 +111,9 @@ def add_user():
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
-
-        if not email or not password:
-            flash('All fields are required')
-            return redirect(url_for('main.index'))
         
         if not email.endswith("@colby.edu"):
-            flash('Invalid email')
+            flash('ERROR: Invalid email address! Please use a @colby.edu email.', 'error')
             return redirect(url_for('main.index'))
         
         user = User(email = email, password_hash = generate_password_hash(password))
