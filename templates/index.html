@@ -7,6 +7,20 @@
         <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;700&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+        <script>
+            window.onbeforeunload = function() {
+                sessionStorage.setItem('scroll_pos', window.scrollY);
+            };
+    
+            window.onload = function() {
+                const scroll_pos = sessionStorage.getItem('scroll_pos');
+                
+                if (scroll_pos)
+                {
+                    window.scrollTo(0, scroll_pos);
+                }
+            };
+        </script>
     </head>
     
     <body>
@@ -142,6 +156,5 @@
                 {% endif %}
             </ul>
         </div>
-
     </body>
 </html>
