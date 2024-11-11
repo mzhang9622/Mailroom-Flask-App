@@ -22,8 +22,4 @@ class Box(db.Model):
     size = db.Column(db.String(200), nullable = False)
     link = db.Column(db.String(200), nullable = False)
     image = db.Column(db.String(200), nullable = False)
-
-    def update_attributes(self, size, link, image):
-        self.size = size
-        self.link = link
-        self.image = image
+    low_stock = db.Column(db.Integer, nullable = False)
