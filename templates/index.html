@@ -51,6 +51,7 @@
             </div>
         </div>
         
+        
         <div id=body-background>
             <ul>
                 {% if admin == True %}
@@ -62,6 +63,39 @@
                     </div>
                 </div>
                 {% endif %}
+
+                <div class = parent-background>
+                    {% if admin == True %}
+                    <div class = box-border-container>
+                        <b>Add New Box</b></br>
+                        <form method = "POST", action = "{{ url_for('main.add_box')}}", enctype = "multipart/form-data">
+                            <input type = "text" placeholder = "Name" name = "name" required>
+                            <input type = "text" placeholder = "Size" name = "size" required>
+                            <input type = "text" placeholder = "Link" name = "link" required></br>
+
+                            <div class="form-row">
+                                <label for="image">Image:</label>
+                                <input type="file" name="image" accept="image/*" required>
+                            </div> </br>
+                            <input type = "submit"  value = "Submit">
+                        </form>
+                    </div>
+                    
+                    <div class = box-border-container>
+                        <b>Add New Admin</b>
+                        <form method = "POST", action = "{{ url_for('main.add_user')}}"></br>
+                            <input type = "text" placeholder = "Email" name = "email" required>
+                            <input type = "text" placeholder = "Password" name = "password" required> </br>
+                            <input type = "submit" value = "Submit">
+                        </form>
+                    </div>
+                    {% endif %}
+                </div>
+
+                {% for category, message in get_flashed_messages(with_categories=True) %}
+                <div class="alert alert-{{category}}">{{ message }}</div>
+                {% endfor %}
+
                 {% for box in boxes %}
                 <div class="box-title">
                     {{ box.name }}
@@ -72,50 +106,29 @@
                         <img src="/static/images/{{  box.image }}" alt="Wrong file path">
                     </div>
                     {% if admin == True %}
-                    <form method = "POST", action = "{{ url_for('main.update_box', box_id = box.id) }}">
-                        <input type = "number" placeholder = "Enter # to + or -" name = "quantity">
-                        <input type = "submit" value = "Submit">
-                    </form>
+                    <div class = box-update-container>
+                        <form method = "POST", action = "{{ url_for('main.update_box', box_id = box.id) }}">
+                            <input type = "number" placeholder = "Enter # to + or -" name = "quantity">
+                            <input type = "submit" value = "Submit">
+                        </form>
+                    
+                        <form method = "POST", action = "{{ url_for('main.delete_box', box_id = box.id) }}">
+                            <input type = "submit" value = "Delete Box">
+                        </form>
+                    </div>
                     {% endif %}
+
                     <div class="box-info-container">
                         Name: {{ box.name }}<br>
                         Quantity: {{ box.quantity }}<br>
                         Size: {{ box.size }}<br>
                         Link: {{ box.link }}
                     </div>
-                    {% if admin == True %}
-                    <form method = "POST", action = "{{ url_for('main.delete_box', box_id = box.id) }}">
-                        <input type = "submit" value = "Delete Box">
-                    </form>
-                    {% endif %}
+
                 </div>
                 {% endfor %}
             </ul>
         </div>
 
-        <div id = body-background>
-            {% if admin == True %}
-            Add New Box</br>
-            <form method = "POST", action = "{{ url_for('main.add_box')}}", enctype = "multipart/form-data">
-                <input type = "text" placeholder = "Name" name = "name"></br>
-                <input type = "text" placeholder = "Size" name = "size"></br>
-                <input type = "text" placeholder = "Link" name = "link"></br>
-                Image:</br>
-                <input type = "file" name = "image" accept = "image/*" required></br>
-                <input type = "submit" value = "Submit">
-            </form>
-            {% endif %}
-        </div>
-
-        <div id = body-background>
-            {% if admin == True %}
-            Add New Admin</br>
-            <form method = "POST", action = "{{ url_for('main.add_user')}}"></br>
-                <input type = "text" placeholder = "Email" name = "email"></br>
-                <input type = "text" placeholder = "Password" name = "password"> </br>
-                <input type = "submit" value = "Submit">
-            </form>
-            {% endif %}
-        </div>
     </body>
 </html>
