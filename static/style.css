@@ -276,6 +276,18 @@ body{
     border-color: red; 
 }
 
+.delete-border-container{
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+    width: 40vw;
+    margin-left: 5vw;
+    background-color: #a6b9dc; 
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); 
+}
+
 /*Beginning of login methods*/
 
 #login-background{
