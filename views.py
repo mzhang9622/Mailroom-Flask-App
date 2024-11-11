@@ -25,9 +25,9 @@ def index():
     db.session.commit()
 
     if current_user.is_authenticated and current_user.email:
-        return render_template('index.html', boxes = Box.query.all(), admin = True)
+        return render_template('index.html', boxes = Box.query.all(), users = User.query.all(), admin = True)
 
-    return render_template('index.html', boxes = Box.query.all(), admin = False)
+    return render_template('index.html', boxes = Box.query.all(), users = User.query.all(), admin = False)
 
 @main_blueprint.route("/about")
 def about():
@@ -85,6 +85,16 @@ def delete_box(box_id):
     if request.method == 'POST':
         box = Box.query.get(box_id)
         db.session.delete(box)
+        db.session.commit()
+
+    return redirect(url_for('main.index'))
+
+@main_blueprint.route('/delete_admin/<int:user_id>', methods=['GET', 'POST'])
+@login_required
+def delete_admin(user_id):
+    if request.method == 'POST':
+        user = User.query.get(user_id)
+        db.session.delete(user)
         db.session.commit()
 
     return redirect(url_for('main.index'))
