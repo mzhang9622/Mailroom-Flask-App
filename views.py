@@ -94,12 +94,13 @@ def delete_box(box_id):
 def add_box():
     if request.method == 'POST':
         name = request.form['name']
+        quantity = request.form['quantity']
         size = request.form['size']
         link = request.form['link']
         image = request.files['image']
         image.save("static/images/" + image.filename)
         low_stock = request.form['low_stock']
-        box = Box(name = name, quantity = 0, size = size, link = link, image = image.filename, low_stock = low_stock)
+        box = Box(name = name, quantity = quantity, size = size, link = link, image = image.filename, low_stock = low_stock)
         db.session.add(box)
         db.session.commit()
 
