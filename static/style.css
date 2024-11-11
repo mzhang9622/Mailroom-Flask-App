@@ -198,9 +198,71 @@ body{
 
 #body-background{
     background: rgb(224, 224, 224);
+    margin-top: 20px;
+    gap: 20px;
 }
 
+.box-border-container{
+    display: flex;
+    flex-direction: column;
+    border: 5px solid white;
+    padding: 5px;
+    width: 40vw;
+    margin-left: 5vw;
+    background-color: #a6b9dc; 
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); 
+}
 
+.box-border-container form {
+    display: flex;
+    flex-direction: column;  
+    align-items: center;       
+}
+
+.parent-background{
+    background: rgb(224, 224, 224);
+    display: flex;   
+    gap: 20px;
+}
+
+.form-row {
+    display: flex;          
+    align-items: center;   
+    gap: 5px;     
+    font-family:Arial, Helvetica, sans-serif;  
+    margin-left: 80px;    
+}
+
+.box-update-container{
+    display: flex;          
+    align-items: center; 
+    gap: 20px;
+}
+
+.box-update-container form {
+    display: flex;         
+    align-items: center; 
+    margin-right: 5px;
+}
+
+.alert-warning {
+    padding: 12px;
+    margin-top: 20px;
+    border-radius: 3px;
+    width: 80vw;
+    font-size: 1.2rem;
+    margin-bottom: 16px;
+    background-color: yellow;
+    color: black;
+    font-family:Georgia, 'Times New Roman', Times, serif;
+  }
+
+  
+
+.box-photo-container.low-stock {
+    border-color: red; 
+}
 
 /*Beginning of login methods*/
 

@@ -50,6 +50,10 @@ def login():
    
    return render_template('login.html')
 
+@main_blueprint.route('/reset')
+def reset():
+   return render_template('reset.html')
+
 @main_blueprint.route('/update_box/<int:box_id>', methods=['GET', 'POST'])
 @login_required
 def update_box(box_id):
@@ -64,6 +68,10 @@ def update_box(box_id):
 
         if box.quantity < 0:
             box.quantity = 0
+
+        if box.quantity <= 20:
+            flash(f'WARNING: Box {box.name} is low in stock!', 'warning')
+
 
         db.session.commit()
 
@@ -87,10 +95,6 @@ def add_box():
         size = request.form['size']
         link = request.form['link']
         image = request.files['image']
-
-        if not name or not size or not link or not image:
-            flash('All fields are required')
-            return redirect(url_for('main.index'))
         
         image.save("static/images/" + image.filename)
         box = Box(name = name, quantity = 0, size = size, link = link, image = image.filename)
