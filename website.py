@@ -22,16 +22,11 @@ login_manager.login_view = 'auth.login'
 def load_user(id):
     return User.query.get(int(id))
 
-# Home page route
-@website.route("/")
-def home():
-    return render_template("home.html")  # Create a home.html template
-
 # Contact page route
 @website.route("/contact")
 def contact_form():
     access_key = os.getenv("WEB3FORMS_ACCESS_KEY")
-    return render_template("contact_form.html", access_key=access_key)
+    return render_template("contact.html", access_key=access_key)
 
 website.register_blueprint(main_blueprint)
 website.register_blueprint(auth_blueprint)
