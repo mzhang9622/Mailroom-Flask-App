@@ -30,7 +30,7 @@
         <div class="contact">
             <form action="https://api.web3forms.com/submit" method="POST">
                 <!--API Access key should be hidden-->
-                <input type="hidden" name="access_key" value="63fe182b-03a2-45f9-ad55-81b05e6123a6">
+                <input type="hidden" name="access_key" value="{{ access_key }}">
                 <label for="name">Name</label>
                 <input type="text" id="name" name="name" placeholder="Your Name" class="contact-inputs" required>
 
@@ -42,10 +42,13 @@
                     <textarea id="message" name="message" class="contact-inputs" placeholder="Type something!" cols="30" rows="10" required></textarea>
 
                     <button id="submitButton" type="submit">Send Message</button>
-
-
             </form>
             </div>
         </div>
     </body>
+
+    <footer>
+        <p>&copy; <span id="year"></span> HashMap OverFlow. All rights reserved.</p>
+    </footer>
+
 </html>
