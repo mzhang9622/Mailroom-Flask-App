@@ -23,3 +23,4 @@ class Box(db.Model):
     link = db.Column(db.String(200), nullable = False)
     image = db.Column(db.String(200), nullable = False)
     low_stock = db.Column(db.Integer, nullable = False)
+    barcode = db.Column(db.String(200), nullable = False)
