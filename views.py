@@ -1,8 +1,17 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
-from flask_login import current_user, login_required
-from models import db, User, Box
-import csv
+from flask import Blueprint
+from flask import render_template
+from flask import request
+from flask import redirect
+from flask import url_for
+from flask import flash
+from flask import jsonify
+from flask_login import current_user
+from flask_login import login_required
+from models import db
+from models import User
+from models import Box
 from werkzeug.security import generate_password_hash
+import os
 
 main_blueprint = Blueprint('main', __name__)
 
@@ -39,9 +48,11 @@ def about():
 @main_blueprint.route("/contact")
 def contact():
     if current_user.is_authenticated and current_user.email:
-        return render_template('contact.html', admin = True)
+        access_key = os.getenv("WEB3FORMS_ACCESS_KEY")
+        return render_template('contact.html', admin = True, access_key = access_key)
     
-    return render_template('contact.html', admin = False)
+    access_key = os.getenv("WEB3FORMS_ACCESS_KEY")
+    return render_template('contact.html', admin = False, access_key = access_key)
 
 @main_blueprint.route('/login')
 def login():
@@ -89,7 +100,7 @@ def delete_box(box_id):
 
     return redirect(url_for('main.index'))
 
-@main_blueprint.route('/delete_admin/<int:user_id>', methods=['GET', 'POST'])
+@main_blueprint.route('/delete_admin/<int:user_id>', methods=['GET', 'POST']) #fetch then
 @login_required
 def delete_admin(user_id):
     if request.method == 'POST':
@@ -110,7 +121,8 @@ def add_box():
         image = request.files['image']
         image.save("static/images/" + image.filename)
         low_stock = request.form['low_stock']
-        box = Box(name = name, quantity = quantity, size = size, link = link, image = image.filename, low_stock = low_stock)
+        barcode = request.form['barcode']
+        box = Box(name = name, quantity = quantity, size = size, link = link, image = image.filename, low_stock = low_stock, barcode = barcode)
         db.session.add(box)
         db.session.commit()
 

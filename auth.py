@@ -1,6 +1,12 @@
-from flask import Blueprint, render_template, redirect, url_for, request, flash
-from models import db, User
-from flask_login import login_user, login_required, logout_user
+from flask import Blueprint
+from flask import redirect
+from flask import url_for
+from flask import request
+from flask import flash
+from models import User
+from flask_login import login_user
+from flask_login import login_required
+from flask_login import logout_user
 
 # Create a blueprint
 auth_blueprint = Blueprint('auth', __name__)

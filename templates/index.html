@@ -7,20 +7,7 @@
         <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;700&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-        <script>
-            window.onbeforeunload = function() {
-                sessionStorage.setItem('scroll_pos', window.scrollY);
-            };
-    
-            window.onload = function() {
-                const scroll_pos = sessionStorage.getItem('scroll_pos');
-                
-                if (scroll_pos)
-                {
-                    window.scrollTo(0, scroll_pos);
-                }
-            };
-        </script>
+        <script src="script.js"></script>
     </head>
     
     <body>
@@ -87,7 +74,8 @@
                             <input type = "number" placeholder = "Quantity" name = "quantity" required>
                             <input type = "text" placeholder = "Size" name = "size" required>
                             <input type = "text" placeholder = "Link" name = "link" required>
-                            <input type = "number" placeholder = "Low Stock #" name = "low_stock" required></br>
+                            <input type = "number" placeholder = "Low Stock #" name = "low_stock" required>
+                            <input type = "text" placeholder = "Barcode" name = "barcode" required></br>
 
                             <div class="form-row">
                                 <label for="image">Image:</label>
@@ -148,7 +136,7 @@
                 <div class = "delete-border-container">
                     <b>Delete Admin?</b>
                     {{ user.email }}
-                    <form method = "POST", action = "{{ url_for('main.delete_admin', user_id = user.id) }}">
+                    <form class = "delete-admin" data_user_id = "{{ user.id }}", method = "POST", action = "{{ url_for('main.delete_admin', user_id = user.id) }}">
                         <input type = "submit" value = "🗑️">
                     </form>
                 </div>

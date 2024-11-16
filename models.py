@@ -1,5 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
-from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.security import generate_password_hash
+from werkzeug.security import check_password_hash
 from flask_login import UserMixin
 
 db = SQLAlchemy()
@@ -23,3 +24,4 @@ class Box(db.Model):
     link = db.Column(db.String(200), nullable = False)
     image = db.Column(db.String(200), nullable = False)
     low_stock = db.Column(db.Integer, nullable = False)
+    barcode = db.Column(db.String(200), nullable = False)
