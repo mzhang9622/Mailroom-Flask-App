@@ -504,3 +504,14 @@ footer {
     padding-top: 25px;
     font-size: 2vw;
 }
+
+.text-button {
+    background: none;
+    border: none;
+    color: inherit;           
+    font: inherit;
+    padding: 0;
+    cursor: pointer;
+
+    color:white;
+}
