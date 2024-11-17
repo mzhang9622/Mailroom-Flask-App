@@ -45,6 +45,10 @@
                         <h1>Sign in to your account</h1>
                     </div>
 
+                    {% for category, message in get_flashed_messages(with_categories=True) %}
+                        <div class="alert alert-{{category}}">{{ message }}</div>
+                    {% endfor %}
+
                     <div class="login-input-container">
                         <form method="POST">
                             <div>

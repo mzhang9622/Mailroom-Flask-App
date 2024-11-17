@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <Title>Mailroom Box Inventory</Title>
+    
+        <link rel="stylesheet" href="/static/style.css">
+        <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+        <script>
+            window.onbeforeunload = function() {
+                sessionStorage.setItem('scroll_pos', window.scrollY);
+            };
+    
+            window.onload = function() {
+                const scroll_pos = sessionStorage.getItem('scroll_pos');
+                
+                if (scroll_pos)
+                {
+                    window.scrollTo(0, scroll_pos);
+                }
+            };
+        </script>
+    </head>
+
+    <body>
+        <div id="settings-background">
+
+            <div class="top-bar">
+                <div>
+                    <a href="/">Home</a>
+                </div>
+                <div>
+                    <a href="/about">About</a>
+                </div>
+                <div>
+                    <a href="/contact">Contact</a>
+                </div>
+                <div>
+                    {% if admin == True %}
+                    <form action="{{ url_for('auth.logout') }}" method="POST">
+                        <button type="submit" class="text-button">Logout</button>
+                    </form>
+                    {% else %}
+                    <a href="/login">Login</a>
+                    {% endif %}
+                </div>
+                <div>
+                    {% if admin == True %}
+                    <a href="/settings">Settings</a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class = "settings">
+                <div class = box-border-container-2>
+                    <b class="font-big">Add New Admin</b>
+                    <form method = "POST", action = "{{ url_for('main.add_user')}}"></br>
+                        <div>
+                            <input type="text" class="login-input-text-2" placeholder="email" name="email" required>
+                        </div>
+                        <div class = "password-container">
+                            <input type="password" class = "password-input-text-2" placeholder="password" name="password" required> 
+                        </div>
+                        <input type="submit" class ="admin_button" value="Create">
+                    </form>
+
+                    {% for category, message in get_flashed_messages(with_categories=True) %}
+                    <div class="alert alert-{{category}}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+                
+
+                {% if admin == True %}
+                <div class = "delete-border-container">
+                    <b class="font-big">Delete Admin</b>
+                    <table class = "table">
+                        <thread>
+                            <th>Email</th>
+                            <th>Action</th>
+                        </thread>
+
+                        <tbody class = "table_data">
+                            {% for user in users %}
+                            <tr>
+                                <td>{{ user.email }}</td>
+                                <td>
+                                    <form method="POST" action="{{ url_for('main.delete_admin', user_id=user.id) }}" onsubmit="return confirmDelete(event)">
+                                        <input type="submit" class = "admin_button" value="Remove 🗑️">
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        <script>
+                            function confirmDelete(event) {
+                                event.preventDefault();
+                        
+                                const isConfirmed = confirm("Do you want to delete this admin?");
+                        
+                                if (isConfirmed) {
+                                    event.target.submit(); 
+                                }
+                            }
+                        </script>
+                    </table>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+    </body>
+
+    <footer>
+        <p>&copy; <span id="year"></span> HashMap OverFlow. All rights reserved.</p>
+    </footer>

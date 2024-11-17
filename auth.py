@@ -16,7 +16,7 @@ def login():
             login_user(user)
             return redirect(url_for('main.index'))
         else:
-            flash('Invalid username or password')
+            flash('ERROR: Invalid email address or password', 'error')
             return redirect(url_for('auth.login'))
 
 

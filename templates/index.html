@@ -45,6 +45,11 @@
                     <a href="/login">Login</a>
                     {% endif %}
                 </div>
+                <div>
+                    {% if admin == True %}
+                    <a href="/settings">Settings</a>
+                    {% endif %}
+                </div>
             </div>
 
             <div class="opening-side-by-side-container">
@@ -100,15 +105,6 @@
                             <input type = "submit"  value = "Submit">
                         </form>
                     </div>
-                    
-                    <div class = box-border-container>
-                        <b>Add New Admin</b>
-                        <form method = "POST", action = "{{ url_for('main.add_user')}}"></br>
-                            <input type = "text" placeholder = "Email" name = "email" required>
-                            <input type = "text" placeholder = "Password" name = "password" required> </br>
-                            <input type = "submit" value = "Submit">
-                        </form>
-                    </div>
                     {% endif %}
                 </div>
 
@@ -144,20 +140,8 @@
                         Size: {{ box.size }}<br>
                         Link: {{ box.link }}
                     </div>
-
                 </div>
                 {% endfor %}
-                {% if admin == True %}
-                {% for user in users %}
-                <div class = "delete-border-container">
-                    <b>Delete Admin?</b>
-                    {{ user.email }}
-                    <form method = "POST", action = "{{ url_for('main.delete_admin', user_id = user.id) }}">
-                        <input type = "submit" value = "🗑️">
-                    </form>
-                </div>
-                {% endfor %}
-                {% endif %}
             </ul>
         </div>
     </body>
