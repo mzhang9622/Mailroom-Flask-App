@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask
 from models import db, User
 from flask_login import LoginManager
 from views import main_blueprint
