@@ -106,7 +106,7 @@ def delete_admin(user_id):
         db.session.delete(user)
         db.session.commit()
 
-    return redirect(url_for('main.settings'))
+    return redirect(url_for('main.admin'))
 
 @main_blueprint.route('/add_box', methods=['GET', 'POST'])
 @login_required
@@ -135,18 +135,18 @@ def add_user():
         
         if not email.endswith("@colby.edu"):
             flash('ERROR: Invalid email address! Please use a @colby.edu email.', 'error')
-            return redirect(url_for('main.settings'))
+            return redirect(url_for('main.admin'))
         
         user = User(email = email, password_hash = generate_password_hash(password))
         db.session.add(user)
         db.session.commit()
 
-    return redirect(url_for('main.settings'))
+    return redirect(url_for('main.admin'))
 
-@main_blueprint.route('/settings')
-def settings():
+@main_blueprint.route('/admin')
+def admin():
     if current_user.is_authenticated and current_user.email:
-        return render_template('settings.html',  users = User.query.all(), admin = True)
+        return render_template('admin.html',  users = User.query.all(), admin = True)
     
 @main_blueprint.route('/callback')
 def callback():
