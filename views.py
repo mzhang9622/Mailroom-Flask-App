@@ -147,3 +147,7 @@ def add_user():
 def settings():
     if current_user.is_authenticated and current_user.email:
         return render_template('settings.html',  users = User.query.all(), admin = True)
+    
+@main_blueprint.route('/callback')
+def callback():
+    pass
