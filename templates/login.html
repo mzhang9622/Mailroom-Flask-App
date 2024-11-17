@@ -55,7 +55,7 @@
                                 <input type="text" class="login-input-text" placeholder="email" name="email">
                             </div>
                             <div class = "password-container">
-                                <input type="password" class = "password-input-text" placeholder="password" name="password" onclick = "togglePassword()"> 
+                                <input type="password" class = "password-input-text" placeholder="password" name="password"> 
                                
                                 <button type = "button"  id = "show-password">
                                     <img src = "./static/images/eye-slash-regular.svg" alt = "Show Password"/>
@@ -75,25 +75,7 @@
             </div>
 
         </div>
-        <script>
-            function togglePassword() {
-                const show_button = document.querySelector('#show-password')
-                const show_password_icon = show_button.querySelector('img')
-                const password_input = document.querySelector('.password-input-text')
-
-
-                show_button.addEventListener('click', () => {
-                if (password_input.type === 'password') {
-                    password_input.type = 'text';
-                    show_password_icon.src = './static/images/eye-regular.svg';
-                } else {
-                    password_input.type = 'password';
-                    show_password_icon.src = './static/images/eye-slash-regular.svg';
-                }
-                })
-
-            }
-        </script>
+        <script src="../static/script.js"></script>
     </body>
 
     <footer>
