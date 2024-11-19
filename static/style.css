@@ -165,6 +165,7 @@ body{
     margin-left: 5vw;
     padding-top: 5vh;
     font-weight: 600;
+    font-size: 4vw;
     font-family: "Inter";
 }
 
@@ -188,6 +189,7 @@ body{
 .box-photo-container img{
     width: 100%;
     height: auto;
+    min-width: 130px;
 }
 
 .box-info-container{
