@@ -1,7 +1,8 @@
 import pytest
 from flask import url_for
 from website import website, db, User
-# import requests
+from models import Box
+import sys
 
 @pytest.fixture
 def client():
@@ -38,10 +39,10 @@ def test_login_success(client):
     )
 
     assert response.status_code == 200
-    assert b"Delete Admin" in response.data
+    assert b"Scan Box" in response.data
 
 def test_invalid_email(client):
-    # Simulate a POST request to /login with invalid credentials
+    # Simulate a POST request to /login with invalid email
     response = client.post(
         '/login',
         data={'email': 'jhsmit25@bowdoin.edu', 'password': 'jordan'},
@@ -53,7 +54,7 @@ def test_invalid_email(client):
     assert b"login-input-container" in response.data
 
 def test_invalid_password(client):
-    # Simulate a POST request to /login with invalid credentials
+    # Simulate a POST request to /login with invalid password
     response = client.post(
         '/login',
         data={'email': 'jhsmit25@colby.edu', 'password': '123'},
@@ -128,22 +129,67 @@ def test_about_non_admin(client):
 
 #Broken because login button is wrong
 
-# def test_contact_admin(client):
-#      # login as admin
-#     client.post(
-#         '/login',
-#         data={'email': 'jhsmit25@colby.edu', 'password': 'jordan'},
-#         follow_redirects=True
-#     )
+def test_contact_admin(client):
+     # login as admin
+    client.post(
+        '/login',
+        data={'email': 'jhsmit25@colby.edu', 'password': 'jordan'},
+        follow_redirects=True
+    )
 
-#     response = client.get('/contact', follow_redirects=True)
+    response = client.get('/contact', follow_redirects=True)
     
-#     assert response.status_code == 200
-#     # Check if the user is automatically redirected to the login page by flask
-#     assert b"ABOUT THE MAILROOM" in response.data
-#     # Check if the user has the option to logout
-#     assert b"logout" in response.data
+    assert response.status_code == 200
+    # Check if the user is on the contact page
+    assert b"gmail.com" in response.data
+    # Check if the user has the option to logout
+    assert b"logout" in response.data
 
+def test_contact_non_admin(client):
+
+    response = client.get('/contact', follow_redirects=True)
+    
+    assert response.status_code == 200
+    # Check if the user is automatically redirected to the login page by flask
+    assert b"gmail.com" in response.data
+    # Check if the user has the option to login
+    assert b"login" in response.data
+
+def test_increase_box_admin(client):
+    client.post(
+        '/login',
+        data={'email': 'jhsmit25@colby.edu', 'password': 'jordan'},
+        follow_redirects=True
+    )
+
+    with website.app_context():
+        init_quan = Box.query.get(1).quantity
+    response = client.post('/update_box/1', data={"quantity": 5}, follow_redirects=True)
+    assert response.status_code == 200
+    with website.app_context():
+        assert Box.query.get(1).quantity == init_quan+5
+
+
+    #Does not work because of overflow error
+
+    # with website.app_context():
+    #     init_quan = Box.query.get(1).quantity
+    # response = client.post('/update_box/1', data={"quantity": sys.maxsize}, follow_redirects=True)
+    # assert response.status_code == 200
+    # with website.app_context():
+    #     assert Box.query.get(1).quantity == init_quan+sys.maxsize
+
+
+    # May or may not work, depends if check is built in or not
+
+    # with website.app_context():
+    #     init_quan = Box.query.get(1).quantity
+    # response = client.post('/update_box/1', data={"quantity": 5.5}, follow_redirects=True)
+    # assert response.status_code == 200
+    # with website.app_context():
+    #     assert Box.query.get(1).quantity == init_quan+5.5
+    
+    
 
 
 
