@@ -1,12 +1,12 @@
 from flask import Flask
-from models import db, User
+from models import db
+from models import User
 from flask_login import LoginManager
 from views import main_blueprint
 from auth import auth_blueprint
 import os
 from dotenv import load_dotenv
 
-# Load environment variables
 load_dotenv()
 
 website = Flask(__name__)

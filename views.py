@@ -9,7 +9,6 @@ from flask_login import login_required
 from models import db
 from models import User
 from models import Box
-from werkzeug.security import generate_password_hash
 import os
 
 main_blueprint = Blueprint('main', __name__)
@@ -18,16 +17,16 @@ main_blueprint = Blueprint('main', __name__)
 def index():
     #this is very temporary
     if not User.query.filter_by(email = "cyu25@colby.edu").all():
-        claire = User(email = "cyu25@colby.edu", password_hash = generate_password_hash("claire"))
+        claire = User(email = "cyu25@colby.edu")
         db.session.add(claire)
     if not User.query.filter_by(email = "jhsmit25@colby.edu").all():
-        jordan = User(email = "jhsmit25@colby.edu", password_hash = generate_password_hash("jordan"))
+        jordan = User(email = "jhsmit25@colby.edu")
         db.session.add(jordan)
     if not User.query.filter_by(email = "mzhang25@colby.edu").all():
-        ming = User(email = "mzhang25@colby.edu", password_hash = generate_password_hash("ming"))
+        ming = User(email = "mzhang25@colby.edu")
         db.session.add(ming)
     if not User.query.filter_by(email = "tjprat25@colby.edu").all():
-        tim = User(email = "tjprat25@colby.edu", password_hash = generate_password_hash("tim"))
+        tim = User(email = "tjprat25@colby.edu")
         db.session.add(tim)
     
     db.session.commit()
@@ -51,17 +50,6 @@ def contact():
         return render_template('contact.html', admin = True, access_key=access_key)
     
     return render_template('contact.html', admin = False, access_key=access_key)
-
-@main_blueprint.route('/login')
-def login():
-   if current_user.is_authenticated and current_user.email:
-        return render_template('index.html', boxes = Box.query.all(), admin = True)
-   
-   return render_template('login.html')
-
-# @main_blueprint.route('/reset')
-# def reset():
-#    return render_template('reset.html')
 
 @main_blueprint.route('/update_box/<int:box_id>', methods=['GET', 'POST'])
 @login_required
@@ -103,8 +91,10 @@ def delete_box(box_id):
 def delete_admin(user_id):
     if request.method == 'POST':
         user = User.query.get(user_id)
-        db.session.delete(user)
-        db.session.commit()
+        if (user.email != current_user.email) and (db.session.query(User).count() != 1):
+            print(current_user)
+            db.session.delete(user)
+            db.session.commit()
 
     return redirect(url_for('main.admin'))
 
@@ -131,13 +121,12 @@ def add_box():
 def add_user():
     if request.method == 'POST':
         email = request.form['email']
-        password = request.form['password']
         
         if not email.endswith("@colby.edu"):
             flash('ERROR: Invalid email address! Please use a @colby.edu email.', 'error')
             return redirect(url_for('main.admin'))
         
-        user = User(email = email, password_hash = generate_password_hash(password))
+        user = User(email = email)
         db.session.add(user)
         db.session.commit()
 
@@ -147,7 +136,3 @@ def add_user():
 def admin():
     if current_user.is_authenticated and current_user.email:
         return render_template('admin.html',  users = User.query.all(), admin = True)
-    
-@main_blueprint.route('/callback')
-def callback():
-    pass
