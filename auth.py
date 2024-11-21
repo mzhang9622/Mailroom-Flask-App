@@ -35,7 +35,7 @@ flow = Flow.from_client_config(
     },
 
     scopes = ["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],
-    redirect_uri = "http://127.0.0.1:5000/callback"
+    redirect_uri = os.environ.get('REDIRECT')
 )
 
 @auth_blueprint.route('/login')

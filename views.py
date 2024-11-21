@@ -91,8 +91,10 @@ def delete_box(box_id):
 def delete_admin(user_id):
     if request.method == 'POST':
         user = User.query.get(user_id)
-        db.session.delete(user)
-        db.session.commit()
+        if (user.email != current_user.email) and (db.session.query(User).count() != 1):
+            print(current_user)
+            db.session.delete(user)
+            db.session.commit()
 
     return redirect(url_for('main.admin'))
 
