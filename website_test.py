@@ -75,7 +75,7 @@ def test_logout_success(client):
 
     # Simulate the POST request to /logout
     response = client.post('/logout', follow_redirects=True)
-    
+
     assert response.status_code == 200
     # Check if the user is redirected to the homepage
     assert b"MAILROOM" in response.data
@@ -94,7 +94,7 @@ def test_logout_failure(client):
     response = client.post('/logout', follow_redirects=True)
 
     print(response.data.decode('utf-8'))
-    
+
     assert response.status_code == 200
     # Check if the user is automatically redirected to the login page by flask
     assert b"login-input-container" in response.data
@@ -109,7 +109,7 @@ def test_about_admin(client):
     )
 
     response = client.get('/about', follow_redirects=True)
-    
+
     assert response.status_code == 200
     # Check if the user is automatically redirected to the login page by flask
     assert b"ABOUT THE MAILROOM" in response.data
@@ -138,7 +138,7 @@ def test_contact_admin(client):
     )
 
     response = client.get('/contact', follow_redirects=True)
-    
+
     assert response.status_code == 200
     # Check if the user is on the contact page
     assert b"gmail.com" in response.data
@@ -148,7 +148,7 @@ def test_contact_admin(client):
 def test_contact_non_admin(client):
 
     response = client.get('/contact', follow_redirects=True)
-    
+
     assert response.status_code == 200
     # Check if the user is automatically redirected to the login page by flask
     assert b"gmail.com" in response.data
@@ -188,8 +188,7 @@ def test_increase_box_admin(client):
     # assert response.status_code == 200
     # with website.app_context():
     #     assert Box.query.get(1).quantity == init_quan+5.5
-    
-    
+
 
 
 

@@ -1,3 +1,4 @@
+import os
 from flask import Blueprint
 from flask import render_template
 from flask import request
@@ -9,7 +10,6 @@ from flask_login import login_required
 from models import db
 from models import User
 from models import Box
-import os
 
 main_blueprint = Blueprint('main', __name__)
 
@@ -28,19 +28,20 @@ def index():
     if not User.query.filter_by(email = "tjprat25@colby.edu").all():
         tim = User(email = "tjprat25@colby.edu")
         db.session.add(tim)
-    
+
     db.session.commit()
 
     if current_user.is_authenticated and current_user.email:
-        return render_template('index.html', boxes = Box.query.all(), users = User.query.all(), admin = True)
+        return render_template('index.html', boxes = Box.query.all(), 
+                               users = User.query.all(), admin = True)
 
-    return render_template('index.html', boxes = Box.query.all(), users = User.query.all(), admin = False)
+    return render_template('index.html', boxes = Box.query.all(), 
+                           users = User.query.all(), admin = False)
 
 @main_blueprint.route("/about")
 def about():
     if current_user.is_authenticated and current_user.email:
         return render_template('about.html', admin = True)
-    
     return render_template('about.html', admin = False)
 
 @main_blueprint.route("/contact")
@@ -65,7 +66,7 @@ def update_box(box_id):
 
         if box.quantity < 0:
             box.quantity = 0
-        
+
         boxes = Box.query.all()
         for box in boxes: 
             if box.quantity <= box.low_stock:
@@ -110,7 +111,8 @@ def add_box():
         image.save("static/images/" + image.filename)
         low_stock = request.form['low_stock']
         barcode = request.form['barcode']
-        box = Box(name = name, quantity = quantity, size = size, link = link, image = image.filename, low_stock = low_stock, barcode = barcode)
+        box = Box(name = name, quantity = quantity, size = size, link = link,
+                image = image.filename, low_stock = low_stock, barcode = barcode)
         db.session.add(box)
         db.session.commit()
 
@@ -121,11 +123,11 @@ def add_box():
 def add_user():
     if request.method == 'POST':
         email = request.form['email']
-        
+
         if not email.endswith("@colby.edu"):
             flash('ERROR: Invalid email address! Please use a @colby.edu email.', 'error')
             return redirect(url_for('main.admin'))
-        
+
         user = User(email = email)
         db.session.add(user)
         db.session.commit()
@@ -136,3 +138,4 @@ def add_user():
 def admin():
     if current_user.is_authenticated and current_user.email:
         return render_template('admin.html',  users = User.query.all(), admin = True)
+    
