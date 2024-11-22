@@ -119,7 +119,6 @@ def test_about_admin(client):
 
 def test_about_non_admin(client):
     response = client.get('/about', follow_redirects=True)
-    
     assert response.status_code == 200
     # Check if the user is automatically redirected to the login page by flask
     assert b"ABOUT THE MAILROOM" in response.data
@@ -198,4 +197,3 @@ def test_increase_box_admin(client):
 #     response = client.get("/contact")
 #     assert response.status_code == 200
 #     assert b"access_key" in response.data  # Check if the access key is rendered in the template
-

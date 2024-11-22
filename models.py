@@ -1,5 +1,5 @@
 '''
-models.py: organization for the database
+models.py
 '''
 
 from flask_sqlalchemy import SQLAlchemy

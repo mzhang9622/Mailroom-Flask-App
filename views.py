@@ -1,5 +1,5 @@
 '''
-views.py: Page Interactions related 
+views.py
 '''
 
 import os
@@ -39,10 +39,10 @@ def index():
     db.session.commit()
 
     if current_user.is_authenticated and current_user.email:
-        return render_template('index.html', boxes = Box.query.all(), 
+        return render_template('index.html', boxes = Box.query.all(),
             users = User.query.all(), admins = True)
 
-    return render_template('index.html', boxes = Box.query.all(), 
+    return render_template('index.html', boxes = Box.query.all(),
         users = User.query.all(), admin = False)
 
 @main_blueprint.route("/about")
@@ -86,7 +86,7 @@ def update_box(box_id):
             box.quantity = 0
 
         boxes = Box.query.all()
-        for box in boxes: 
+        for box in boxes:
             if box.quantity <= box.low_stock:
                 flash(f'WARNING: {box.name} is low in stock!', 'warning')
 
@@ -172,4 +172,3 @@ def admin():
     '''
     if current_user.is_authenticated and current_user.email:
         return render_template('admin.html',  users = User.query.all(), admin = True)
-    

@@ -1,5 +1,5 @@
 '''
-auth.py: All authenticated related 
+auth.py
 '''
 
 import os
@@ -37,8 +37,8 @@ flow = Flow.from_client_config(
         }
     },
 
-    scopes = ["https://www.googleapis.com/auth/userinfo.profile", 
-              "https://www.googleapis.com/auth/userinfo.email", "openid"],
+    scopes = ["https://www.googleapis.com/auth/userinfo.profile",
+            "https://www.googleapis.com/auth/userinfo.email", "openid"],
     redirect_uri = os.environ.get('REDIRECT')
 )
 
@@ -75,8 +75,8 @@ def callback():
     request_session = requests.session()
     cached_session = cachecontrol.CacheControl(request_session)
     token_request = google.auth.transport.requests.Request(session = cached_session)
-    id_info = id_token.verify_oauth2_token(id_token = credentials._id_token, 
-                                        request = token_request, audience = GOOGLE_CLIENT_ID)
+    id_info = id_token.verify_oauth2_token(id_token = credentials._id_token,
+                request = token_request, audience = GOOGLE_CLIENT_ID)
     session["google_id"] = id_info.get("sub")
     session["name"] = id_info.get("name")
     user = User.query.filter_by(email = id_info.get("email")).first()
