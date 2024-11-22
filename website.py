@@ -1,11 +1,15 @@
+'''
+website.py
+'''
+
+import os
+from dotenv import load_dotenv
+from flask_login import LoginManager
 from flask import Flask
 from models import db
 from models import User
-from flask_login import LoginManager
 from views import main_blueprint
 from auth import auth_blueprint
-import os
-from dotenv import load_dotenv
 
 load_dotenv()
 
@@ -20,6 +24,9 @@ login_manager.login_view = 'auth.login'
 
 @login_manager.user_loader
 def load_user(id):
+    '''
+    Get User
+    '''
     return User.query.get(int(id))
 
 website.register_blueprint(main_blueprint)

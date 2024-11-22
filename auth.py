@@ -1,3 +1,16 @@
+'''
+auth.py
+'''
+
+import os
+import requests
+from flask_login import login_user
+from flask_login import login_required
+from flask_login import logout_user
+from pip._vendor import cachecontrol
+from google_auth_oauthlib.flow import Flow
+from google.oauth2 import id_token
+import google.auth.transport.requests
 from flask import Blueprint
 from flask import redirect
 from flask import url_for
@@ -5,17 +18,7 @@ from flask import request
 from flask import flash
 from flask import session
 from flask import abort
-from models import db
 from models import User
-from flask_login import login_user
-from flask_login import login_required
-from flask_login import logout_user
-from google_auth_oauthlib.flow import Flow
-from pip._vendor import cachecontrol
-from google.oauth2 import id_token
-import google.auth.transport.requests
-import os
-import requests
 
 auth_blueprint = Blueprint('auth', __name__)
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
@@ -34,12 +37,16 @@ flow = Flow.from_client_config(
         }
     },
 
-    scopes = ["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],
+    scopes = ["https://www.googleapis.com/auth/userinfo.profile",
+            "https://www.googleapis.com/auth/userinfo.email", "openid"],
     redirect_uri = os.environ.get('REDIRECT')
 )
 
 @auth_blueprint.route('/login')
 def login():
+    '''
+    Login
+    '''
     authorization_url, state = flow.authorization_url()
     session["state"] = state
     return redirect(authorization_url)
@@ -48,11 +55,17 @@ def login():
 @auth_blueprint.route('/logout', methods=['POST'])
 @login_required
 def logout():
+    '''
+    Logout
+    '''
     logout_user()
     return redirect(url_for('main.index'))
 
 @auth_blueprint.route('/callback')
 def callback():
+    '''
+    Google API
+    '''
     flow.fetch_token(authorization_response = request.url)
 
     if not session["state"] == request.args["state"]:
@@ -62,14 +75,15 @@ def callback():
     request_session = requests.session()
     cached_session = cachecontrol.CacheControl(request_session)
     token_request = google.auth.transport.requests.Request(session = cached_session)
-    id_info = id_token.verify_oauth2_token(id_token = credentials._id_token, request = token_request, audience = GOOGLE_CLIENT_ID)
+    id_info = id_token.verify_oauth2_token(id_token = credentials._id_token,
+                request = token_request, audience = GOOGLE_CLIENT_ID)
     session["google_id"] = id_info.get("sub")
     session["name"] = id_info.get("name")
     user = User.query.filter_by(email = id_info.get("email")).first()
-    
+
     if user:
         login_user(user)
         return redirect(url_for('main.index'))
-    else:
-        flash('ERROR: Invalid email address', 'error')
-        return redirect(url_for('auth.login'))
+
+    flash('ERROR: Invalid email address', 'error')
+    return redirect(url_for('auth.login'))

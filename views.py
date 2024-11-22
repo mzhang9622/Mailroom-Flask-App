@@ -1,3 +1,8 @@
+'''
+views.py
+'''
+
+import os
 from flask import Blueprint
 from flask import render_template
 from flask import request
@@ -9,12 +14,14 @@ from flask_login import login_required
 from models import db
 from models import User
 from models import Box
-import os
 
 main_blueprint = Blueprint('main', __name__)
 
 @main_blueprint.route("/")
 def index():
+    '''
+    Main page
+    '''
     #this is very temporary
     if not User.query.filter_by(email = "cyu25@colby.edu").all():
         claire = User(email = "cyu25@colby.edu")
@@ -28,32 +35,44 @@ def index():
     if not User.query.filter_by(email = "tjprat25@colby.edu").all():
         tim = User(email = "tjprat25@colby.edu")
         db.session.add(tim)
-    
+
     db.session.commit()
 
     if current_user.is_authenticated and current_user.email:
-        return render_template('index.html', boxes = Box.query.all(), users = User.query.all(), admin = True)
+        return render_template('index.html', boxes = Box.query.all(),
+            users = User.query.all(), admins = True)
 
-    return render_template('index.html', boxes = Box.query.all(), users = User.query.all(), admin = False)
+    return render_template('index.html', boxes = Box.query.all(),
+        users = User.query.all(), admin = False)
 
 @main_blueprint.route("/about")
 def about():
+    '''
+    About page
+    '''
     if current_user.is_authenticated and current_user.email:
         return render_template('about.html', admin = True)
-    
     return render_template('about.html', admin = False)
+
 
 @main_blueprint.route("/contact")
 def contact():
+    '''
+    Contact Page
+    '''
     access_key = os.getenv("WEB3FORMS_ACCESS_KEY")
     if current_user.is_authenticated and current_user.email:
         return render_template('contact.html', admin = True, access_key=access_key)
-    
+
     return render_template('contact.html', admin = False, access_key=access_key)
+
 
 @main_blueprint.route('/update_box/<int:box_id>', methods=['GET', 'POST'])
 @login_required
 def update_box(box_id):
+    '''
+    Update Boxes
+    '''
     if request.method == 'POST':
         box = Box.query.get(box_id)
         quantity = request.form['quantity']
@@ -65,9 +84,9 @@ def update_box(box_id):
 
         if box.quantity < 0:
             box.quantity = 0
-        
+
         boxes = Box.query.all()
-        for box in boxes: 
+        for box in boxes:
             if box.quantity <= box.low_stock:
                 flash(f'WARNING: {box.name} is low in stock!', 'warning')
 
@@ -79,6 +98,9 @@ def update_box(box_id):
 @main_blueprint.route('/delete_box/<int:box_id>', methods=['GET', 'POST'])
 @login_required
 def delete_box(box_id):
+    '''
+    Delete Boxes
+    '''
     if request.method == 'POST':
         box = Box.query.get(box_id)
         db.session.delete(box)
@@ -89,6 +111,9 @@ def delete_box(box_id):
 @main_blueprint.route('/delete_admin/<int:user_id>', methods=['GET', 'POST'])
 @login_required
 def delete_admin(user_id):
+    '''
+    Delete Admins
+    '''
     if request.method == 'POST':
         user = User.query.get(user_id)
         if (user.email != current_user.email) and (db.session.query(User).count() != 1):
@@ -98,9 +123,13 @@ def delete_admin(user_id):
 
     return redirect(url_for('main.admin'))
 
+
 @main_blueprint.route('/add_box', methods=['GET', 'POST'])
 @login_required
 def add_box():
+    '''
+    Add Boxes
+    '''
     if request.method == 'POST':
         name = request.form['name']
         quantity = request.form['quantity']
@@ -110,7 +139,8 @@ def add_box():
         image.save("static/images/" + image.filename)
         low_stock = request.form['low_stock']
         barcode = request.form['barcode']
-        box = Box(name = name, quantity = quantity, size = size, link = link, image = image.filename, low_stock = low_stock, barcode = barcode)
+        box = Box(name = name, quantity = quantity, size = size, link = link,
+                image = image.filename, low_stock = low_stock, barcode = barcode)
         db.session.add(box)
         db.session.commit()
 
@@ -119,13 +149,16 @@ def add_box():
 @main_blueprint.route('/add_user', methods=['GET', 'POST'])
 @login_required
 def add_user():
+    '''
+    Add Users
+    '''
     if request.method == 'POST':
         email = request.form['email']
-        
+
         if not email.endswith("@colby.edu"):
             flash('ERROR: Invalid email address! Please use a @colby.edu email.', 'error')
             return redirect(url_for('main.admin'))
-        
+
         user = User(email = email)
         db.session.add(user)
         db.session.commit()
@@ -134,5 +167,8 @@ def add_user():
 
 @main_blueprint.route('/admin')
 def admin():
+    '''
+    Admin Page
+    '''
     if current_user.is_authenticated and current_user.email:
         return render_template('admin.html',  users = User.query.all(), admin = True)
