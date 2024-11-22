@@ -14,6 +14,7 @@ from flask_login import login_required
 from models import db
 from models import User
 from models import Box
+from util import send_email
 
 main_blueprint = Blueprint('main', __name__)
 
@@ -70,9 +71,9 @@ def contact():
 @main_blueprint.route('/update_box/<int:box_id>', methods=['GET', 'POST'])
 @login_required
 def update_box(box_id):
-    '''
+    """
     Update Boxes
-    '''
+    """
     if request.method == 'POST':
         box = Box.query.get(box_id)
         quantity = request.form['quantity']
@@ -80,20 +81,35 @@ def update_box(box_id):
         if quantity == '':
             quantity = 0
 
-        box.quantity = box.quantity + int(quantity)
+        box.quantity += int(quantity)
 
         if box.quantity < 0:
             box.quantity = 0
 
-        boxes = Box.query.all()
-        for box in boxes:
-            if box.quantity <= box.low_stock:
-                flash(f'WARNING: {box.name} is low in stock!', 'warning')
-
+        # Check for low stock
+        if box.quantity <= box.low_stock:
+            flash(f'WARNING: {box.name} is low in stock!', 'warning')
+            
+            # Send email alert
+            email_content = f"""
+                <p>Dear Admin,</p>
+                <p>The stock for <strong>{box.name}</strong> is running low.</p>
+                <ul>
+                    <li>Current Quantity: {box.quantity}</li>
+                    <li>Low Stock Threshold: {box.low_stock}</li>
+                </ul>
+                <p>Please restock soon.</p>
+            """
+            send_email(
+                subject=f"Low Stock Alert: {box.name}",
+                to_email='admin@example.com',
+                html_content=email_content
+            )
 
         db.session.commit()
 
     return redirect(url_for('main.index'))
+
 
 @main_blueprint.route('/delete_box/<int:box_id>', methods=['GET', 'POST'])
 @login_required
