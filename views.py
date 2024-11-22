@@ -82,9 +82,7 @@ def update_box(box_id):
             quantity = 0
 
         box.quantity += int(quantity)
-
-        if box.quantity < 0:
-            box.quantity = 0
+        box.quantity = max(box.quantity, 0)
 
         # Check for low stock
         if box.quantity <= box.low_stock:
