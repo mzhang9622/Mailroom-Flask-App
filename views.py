@@ -185,6 +185,5 @@ def admin():
     '''
     if current_user.is_authenticated and current_user.email:
         return render_template('admin.html',  users = User.query.all(), admin = True)
-    
     return render_template('index.html', boxes = Box.query.all(),
         users = User.query.all(), admin = False)
