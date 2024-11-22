@@ -31,7 +31,6 @@ flow = Flow.from_client_config(
         "web": {
             "client_id": GOOGLE_CLIENT_ID,
             "client_secret": GOOGLE_CLIENT_SECRET,
-            "redirect_uris": "https://mailroom-flask-app-83e87278f3b9.herokuapp.com/callback",
             "auth_uri": "https://accounts.google.com/o/oauth2/auth",
             "token_uri": "https://oauth2.googleapis.com/token",
         }
