@@ -33,24 +33,28 @@
                     {% endif %}
                 </div>
             </div>
+            <div class="contact-title">
+                <p>CONTACT US</p>
+            </div>
+            <div class="contact-body">
+                <p>If you have any questions, need support, or want to learn more, please reach out to us using the form below. We will get back to you as quickly as possible.</p>
+            </div>
+            <div class="contact">
+                <form action="https://api.web3forms.com/submit" method="POST">
+                    <!--API Access key should be hidden-->
+                    <input type="hidden" name="access_key" value="{{ access_key }}">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" placeholder="Your Name" class="contact-inputs" required>
 
 
-        <div class="contact">
-            <form action="https://api.web3forms.com/submit" method="POST">
-                <!--API Access key should be hidden-->
-                <input type="hidden" name="access_key" value="{{ access_key }}">
-                <label for="name">Name</label>
-                <input type="text" id="name" name="name" placeholder="Your Name" class="contact-inputs" required>
+                        <label for="name">Email</label>
+                        <input type="email" id="email" name="email" placeholder="example@gmail.com" class="contact-inputs" required>
 
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" class="contact-inputs" placeholder="Type something!" cols="30" rows="10" required></textarea>
 
-                    <label for="name">Email</label>
-                    <input type="email" id="email" name="email" placeholder="example@gmail.com" class="contact-inputs" required>
-
-                    <label for="message">Message</label>
-                    <textarea id="message" name="message" class="contact-inputs" placeholder="Type something!" cols="30" rows="10" required></textarea>
-
-                    <button id="submitButton" type="submit">Send Message</button>
-            </form>
+                        <button id="submitButton" type="submit">Send Message</button>
+                </form>
             </div>
         </div>
     </body>
