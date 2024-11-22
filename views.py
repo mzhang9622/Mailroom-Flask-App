@@ -71,9 +71,9 @@ def contact():
 @main_blueprint.route('/update_box/<int:box_id>', methods=['GET', 'POST'])
 @login_required
 def update_box(box_id):
-    """
+    '''
     Update Boxes
-    """
+    '''
     if request.method == 'POST':
         box = Box.query.get(box_id)
         quantity = request.form['quantity']
