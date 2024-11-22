@@ -1,3 +1,7 @@
+'''
+views.py: Page Interactions related 
+'''
+
 import os
 from flask import Blueprint
 from flask import render_template
@@ -13,6 +17,9 @@ from models import Box
 
 main_blueprint = Blueprint('main', __name__)
 
+'''
+Main page
+'''
 @main_blueprint.route("/")
 def index():
     #this is very temporary
@@ -33,25 +40,34 @@ def index():
 
     if current_user.is_authenticated and current_user.email:
         return render_template('index.html', boxes = Box.query.all(), 
-                               users = User.query.all(), admin = True)
+            users = User.query.all(), admins = True)
 
     return render_template('index.html', boxes = Box.query.all(), 
-                           users = User.query.all(), admin = False)
+        users = User.query.all(), admin = False)
 
+'''
+About page
+'''
 @main_blueprint.route("/about")
 def about():
     if current_user.is_authenticated and current_user.email:
         return render_template('about.html', admin = True)
     return render_template('about.html', admin = False)
 
+'''
+Contact page
+'''
 @main_blueprint.route("/contact")
 def contact():
     access_key = os.getenv("WEB3FORMS_ACCESS_KEY")
     if current_user.is_authenticated and current_user.email:
         return render_template('contact.html', admin = True, access_key=access_key)
-    
+
     return render_template('contact.html', admin = False, access_key=access_key)
 
+'''
+Update Boxes
+'''
 @main_blueprint.route('/update_box/<int:box_id>', methods=['GET', 'POST'])
 @login_required
 def update_box(box_id):
@@ -77,6 +93,9 @@ def update_box(box_id):
 
     return redirect(url_for('main.index'))
 
+'''
+Delete Boxes
+'''
 @main_blueprint.route('/delete_box/<int:box_id>', methods=['GET', 'POST'])
 @login_required
 def delete_box(box_id):
@@ -87,6 +106,9 @@ def delete_box(box_id):
 
     return redirect(url_for('main.index'))
 
+'''
+Delete Admins
+'''
 @main_blueprint.route('/delete_admin/<int:user_id>', methods=['GET', 'POST'])
 @login_required
 def delete_admin(user_id):
@@ -99,6 +121,9 @@ def delete_admin(user_id):
 
     return redirect(url_for('main.admin'))
 
+'''
+Add Boxes
+'''
 @main_blueprint.route('/add_box', methods=['GET', 'POST'])
 @login_required
 def add_box():
@@ -118,6 +143,9 @@ def add_box():
 
     return redirect(url_for('main.index'))
 
+'''
+Add Users
+'''
 @main_blueprint.route('/add_user', methods=['GET', 'POST'])
 @login_required
 def add_user():
@@ -134,6 +162,9 @@ def add_user():
 
     return redirect(url_for('main.admin'))
 
+'''
+Admin Page
+'''
 @main_blueprint.route('/admin')
 def admin():
     if current_user.is_authenticated and current_user.email:

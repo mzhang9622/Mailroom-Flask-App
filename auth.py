@@ -1,3 +1,7 @@
+'''
+auth.py: All authenticated related 
+'''
+
 import os
 import requests
 from flask_login import login_user
@@ -61,8 +65,8 @@ def callback():
     request_session = requests.session()
     cached_session = cachecontrol.CacheControl(request_session)
     token_request = google.auth.transport.requests.Request(session = cached_session)
-    id_info = id_token.verify_oauth2_token(id_token = credentials._id_token, request = token_request,
-                                            audience = GOOGLE_CLIENT_ID)
+    id_info = id_token.verify_oauth2_token(id_token = credentials._id_token, 
+                                           request = token_request, audience = GOOGLE_CLIENT_ID)
     session["google_id"] = id_info.get("sub")
     session["name"] = id_info.get("name")
     user = User.query.filter_by(email = id_info.get("email")).first()
@@ -70,6 +74,6 @@ def callback():
     if user:
         login_user(user)
         return redirect(url_for('main.index'))
-    
+
     flash('ERROR: Invalid email address', 'error')
     return redirect(url_for('auth.login'))
