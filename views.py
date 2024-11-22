@@ -41,7 +41,7 @@ def index():
 
     if current_user.is_authenticated and current_user.email:
         return render_template('index.html', boxes = Box.query.all(),
-            users = User.query.all(), admins = True)
+            users = User.query.all(), admin = True)
 
     return render_template('index.html', boxes = Box.query.all(),
         users = User.query.all(), admin = False)
@@ -82,14 +82,11 @@ def update_box(box_id):
             quantity = 0
 
         box.quantity += int(quantity)
-
-        if box.quantity < 0:
-            box.quantity = 0
+        box.quantity = max(box.quantity, 0)
 
         # Check for low stock
         if box.quantity <= box.low_stock:
             flash(f'WARNING: {box.name} is low in stock!', 'warning')
-            
             # Send email alert
             email_content = f"""
                 <p>Dear Admin,</p>
@@ -188,3 +185,5 @@ def admin():
     '''
     if current_user.is_authenticated and current_user.email:
         return render_template('admin.html',  users = User.query.all(), admin = True)
+    return render_template('index.html', boxes = Box.query.all(),
+        users = User.query.all(), admin = False)

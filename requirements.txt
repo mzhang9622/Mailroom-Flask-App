@@ -23,3 +23,4 @@ rsa==4.9
 six==1.16.0
 urllib3==2.2.3
 sendgrid==6.11.0
+pytest==8.3.3
