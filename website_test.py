@@ -1,8 +1,10 @@
 import pytest
-from flask import url_for
-from website import website, db, User
+from website import website
+from website import db
 from models import Box
-import sys
+#import sys
+#from flask import url_for
+#from website import User
 
 @pytest.fixture
 def client():

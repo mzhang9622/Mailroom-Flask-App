@@ -1,6 +1,10 @@
+'''
+util.py
+'''
+
+import os
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
-import os
 
 def send_email(subject, to_email, html_content):
     """
