@@ -37,12 +37,16 @@ flow = Flow.from_client_config(
         }
     },
 
-    scopes = ["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],
+    scopes = ["https://www.googleapis.com/auth/userinfo.profile", 
+              "https://www.googleapis.com/auth/userinfo.email", "openid"],
     redirect_uri = os.environ.get('REDIRECT')
 )
 
 @auth_blueprint.route('/login')
 def login():
+    '''
+    Login
+    '''
     authorization_url, state = flow.authorization_url()
     session["state"] = state
     return redirect(authorization_url)
@@ -51,11 +55,17 @@ def login():
 @auth_blueprint.route('/logout', methods=['POST'])
 @login_required
 def logout():
+    '''
+    Logout
+    '''
     logout_user()
     return redirect(url_for('main.index'))
 
 @auth_blueprint.route('/callback')
 def callback():
+    '''
+    Google API
+    '''
     flow.fetch_token(authorization_response = request.url)
 
     if not session["state"] == request.args["state"]:
@@ -66,7 +76,7 @@ def callback():
     cached_session = cachecontrol.CacheControl(request_session)
     token_request = google.auth.transport.requests.Request(session = cached_session)
     id_info = id_token.verify_oauth2_token(id_token = credentials._id_token, 
-                                           request = token_request, audience = GOOGLE_CLIENT_ID)
+                                        request = token_request, audience = GOOGLE_CLIENT_ID)
     session["google_id"] = id_info.get("sub")
     session["name"] = id_info.get("name")
     user = User.query.filter_by(email = id_info.get("email")).first()

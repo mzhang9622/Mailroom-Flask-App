@@ -20,6 +20,9 @@ login_manager.login_view = 'auth.login'
 
 @login_manager.user_loader
 def load_user(id):
+    '''
+    Get User
+    '''
     return User.query.get(int(id))
 
 website.register_blueprint(main_blueprint)

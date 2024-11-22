@@ -7,19 +7,19 @@ from flask_login import UserMixin
 
 db = SQLAlchemy()
 
-'''
-User: ids and emails
-'''
 class User(db.Model, UserMixin):
+    '''
+    User: ids and emails
+    '''
     id = db.Column(db.Integer, primary_key = True)
     email = db.Column(db.String(120), unique = True, nullable = False)
 
-'''
-Box: ids, names, quantities, 
-sizes, links, images, low stocks,
-and barcode
-'''
 class Box(db.Model):
+    '''
+    Box: ids, names, quantities, 
+    sizes, links, images, low stocks,
+    and barcode
+    '''
     id = db.Column(db.Integer, primary_key = True)
     name = db.Column(db.String(200), nullable = False, unique = True)
     quantity = db.Column(db.Integer, nullable = False)
