@@ -178,7 +178,8 @@ def add_user():
 
     return redirect(url_for('main.admin'))
 
-@main_blueprint.route('/admin')
+@main_blueprint.route('/admin', methods =['GET'])
+@login_required
 def admin():
     '''
     Admin Page
