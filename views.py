@@ -84,10 +84,8 @@ def update_box(box_id):
         box.quantity += int(quantity)
         box.quantity = max(box.quantity, 0)
 
-        # Check for low stock
         if box.quantity <= box.low_stock:
             flash(f'WARNING: {box.name} is low in stock!', 'warning')
-            # Send email alert
             email_content = f"""
                 <p>Dear Admin,</p>
                 <p>The stock for <strong>{box.name}</strong> is running low.</p>
