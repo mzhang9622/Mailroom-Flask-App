@@ -2,6 +2,7 @@
 website_test.py
 '''
 
+import io
 import sys
 import sqlite3
 import pytest
@@ -38,6 +39,7 @@ def test_login_success(client):
         follow_redirects=True
     )
 
+    print(response.data)
     assert response.status_code == 200
     assert b"Scan Box" in response.data
 
@@ -185,7 +187,7 @@ def test_contact_non_admin(client):
     # Check if the user has the option to login
     assert b"login" in response.data
 
-def test_increase_box_admin(client):
+def test_increase_box(client):
     '''
     GIVEN: A Flask app configured for testing with a test client
     WHEN: The '/update_box/<int>' page is requested (POST)
@@ -200,7 +202,7 @@ def test_increase_box_admin(client):
     #Does not work because database has been temporarily wiped
     with website.app_context():
         init_quan = Box.query.get(1).quantity
-    response = client.post('/update_box/1', data={"quantity": 5}, follow_redirects=True)
+    response = client.post('/update_box/1', data={"quantity": "5"}, follow_redirects=True)
     assert response.status_code == 200
     with website.app_context():
         assert Box.query.get(1).quantity == init_quan+5
@@ -277,16 +279,17 @@ def test_delete_admin_success(client):
         )
 
     with website.app_context():
-        init_email = User.query.get(1).email
+        init_email = User.query.get(2).email
 
-    response = client.post('/delete_admin/1', follow_redirects=True)
-    #Should be redirected to main.admin
-    assert response.status_code == 302
+    response = client.post('/delete_admin/2', follow_redirects=True)
+    #Should be taken to main.admin
+    assert response.status_code == 200
     assert b"logout" in response.data
-    assert b"Scan" in response.data
+    assert b"Delete Admin" in response.data
 
+    #Fails temporarily because all users are hard coded into the system, so none can be deleted
     with website.app_context():
-        assert User.query.get(1).email != init_email
+        assert User.query.get(2).email != init_email
 
 
 def test_delete_yourself_failure(client):
@@ -302,17 +305,19 @@ def test_delete_yourself_failure(client):
         )
 
     with website.app_context():
-        init_email = User.query.get(1).email
+        init_email = User.query.get(2).email
 
-    response = client.post('/delete_admin/1', follow_redirects=True)
-    #Should be redirected to main.admin
-    assert response.status_code == 302
+    response = client.post('/delete_admin/2', follow_redirects=True)
+    #Should be taken to main.admin
+    assert response.status_code == 200
     assert b"logout" in response.data
-    assert b"Scan" in response.data
+    assert b"Delete Admin" in response.data
 
     #Verify Admin not deleted
     with website.app_context():
-        assert User.query.get(1).email == init_email
+        assert User.query.get(2).email == init_email
+
+
 
 
 def test_add_box(client):
@@ -327,10 +332,17 @@ def test_add_box(client):
             follow_redirects=True
         )
 
+    fake_file = (io.BytesIO(b"fake image content"), "test_image.png")
+
     conn = sqlite3.connect('instance/maildatabase.db')
     cursor = conn.cursor()
     cursor.execute("SELECT MAX(id) FROM box")
-    init_max = cursor.fetchone()[0]
+    print("HERE", cursor.fetchone()[0])
+    #Check if database is empty
+    if cursor.fetchone() != None:
+        init_max = cursor.fetchone()[0]
+    else:
+        init_max = 0
 
     response = client.post('/add_box',
                 data={
@@ -338,15 +350,16 @@ def test_add_box(client):
                 'quantity': 'test',
                 'size': 'test',
                 'link':  'test',
-                'image':  'test',
+                'image':  fake_file,
                 'low_stock':  'test',
                 'barcode': 'test'
                 },
             follow_redirects=True
         )
 
+    print(response.data)
     #Should be redirected to main.admin
-    assert response.status_code == 302
+    assert response.status_code == 200
     assert b"logout" in response.data
     assert b"Scan" in response.data
 
@@ -376,16 +389,19 @@ def test_add_user_success(client):
 
     response = client.post('/add_user',
                 data={
+                #Should fail after one use because email would be added to the datbase
                 #enter valid email
-                'email': 'test@colby.edu',
+                'email': 'test5@colby.edu',
+                'password': '1234'
                 },
             follow_redirects=True
         )
 
+    print(response.data)
     #Should be redirected to main.admin
-    assert response.status_code == 302
+    assert response.status_code == 200
     assert b"logout" in response.data
-    assert b"Scan" in response.data
+    assert b"Add New Admin" in response.data
 
     conn = sqlite3.connect('instance/maildatabase.db')
     cursor = conn.cursor()
