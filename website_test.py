@@ -2,13 +2,13 @@
 website_test.py
 '''
 
+import sys
+import sqlite3
 import pytest
 from website import website
 from website import db
 from models import Box
 from models import User
-import sys
-import sqlite3
 #from flask import url_for
 #from website import User
 
@@ -244,7 +244,6 @@ def test_decrease_box_admin(client):
     with website.app_context():
         assert Box.query.get(1).quantity == init_quan-sys.maxsize
 
-    
 def test_delete_box(client):
     '''
     GIVEN: A Flask app configured for testing with a test client
@@ -328,7 +327,7 @@ def test_add_box(client):
             follow_redirects=True
         )
 
-    conn = sqlite3.connect('maildatabase.db')
+    conn = sqlite3.connect('instance/maildatabase.db')
     cursor = conn.cursor()
     cursor.execute("SELECT MAX(id) FROM box")
     init_max = cursor.fetchone()[0]
@@ -351,7 +350,7 @@ def test_add_box(client):
     assert b"logout" in response.data
     assert b"Scan" in response.data
 
-    conn = sqlite3.connect('maildatabase.db')
+    conn = sqlite3.connect('instance/maildatabase.db')
     cursor = conn.cursor()
     cursor.execute("SELECT MAX(id) FROM box")
     #Verify database now has one additional box
@@ -370,7 +369,7 @@ def test_add_user_success(client):
             follow_redirects=True
         )
 
-    conn = sqlite3.connect('maildatabase.db')
+    conn = sqlite3.connect('instance/maildatabase.db')
     cursor = conn.cursor()
     cursor.execute("SELECT MAX(id) FROM user")
     init_max = cursor.fetchone()[0]
@@ -388,7 +387,7 @@ def test_add_user_success(client):
     assert b"logout" in response.data
     assert b"Scan" in response.data
 
-    conn = sqlite3.connect('maildatabase.db')
+    conn = sqlite3.connect('instance/maildatabase.db')
     cursor = conn.cursor()
     cursor.execute("SELECT MAX(id) FROM user")
     #Verify database now has one additional user
@@ -427,5 +426,4 @@ def test_admin_failure(client):
     #Should be taken to non-admin home page
     assert response.status_code == 200
     assert b"login" in response.data
-    assert b"Admin" not in response.datas
-
+    assert b"Admin" not in response.data
