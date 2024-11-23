@@ -2,13 +2,13 @@
 website_test.py
 '''
 
+import sys
+import sqlite3
 import pytest
 from website import website
 from website import db
 from models import Box
 from models import User
-import sys
-import sqlite3
 #from flask import url_for
 #from website import User
 
@@ -244,7 +244,6 @@ def test_decrease_box_admin(client):
     with website.app_context():
         assert Box.query.get(1).quantity == init_quan-sys.maxsize
 
-    
 def test_delete_box(client):
     '''
     GIVEN: A Flask app configured for testing with a test client
@@ -428,4 +427,3 @@ def test_admin_failure(client):
     assert response.status_code == 200
     assert b"login" in response.data
     assert b"Admin" not in response.data
-
