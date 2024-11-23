@@ -21,7 +21,8 @@ from flask import abort
 from models import User
 
 auth_blueprint = Blueprint('auth', __name__)
-os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
+if os.environ.get('REDIRECT') == "http://127.0.0.1:5000/callback":
+    os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
 
 GOOGLE_CLIENT_ID = os.environ.get('GOOGLE_CLIENT_ID')
 GOOGLE_CLIENT_SECRET = os.environ.get('GOOGLE_CLIENT_SECRET')
