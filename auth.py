@@ -42,10 +42,27 @@ flow = Flow.from_client_config(
     redirect_uri = os.environ.get('REDIRECT')
 )
 
-@auth_blueprint.route('/login')
+@auth_blueprint.route('/login', methods=['GET', 'POST'])
 def login():
     '''
     Login
+    '''
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        
+        user = User.query.filter_by(email=email).first()
+        if user and user.check_password(password):
+            login_user(user)
+            return redirect(url_for('main.index'))
+        else:
+            flash('Invalid username or password')
+            return redirect(url_for('auth.login'))
+
+@auth_blueprint.route('/login_g')
+def login_g():
+    '''
+    Google Login
     '''
     authorization_url, state = flow.authorization_url()
     session["state"] = state

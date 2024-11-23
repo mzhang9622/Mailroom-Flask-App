@@ -15,6 +15,7 @@ from models import db
 from models import User
 from models import Box
 from util import send_email
+from werkzeug.security import generate_password_hash
 
 main_blueprint = Blueprint('main', __name__)
 
@@ -25,16 +26,16 @@ def index():
     '''
     #this is very temporary
     if not User.query.filter_by(email = "cyu25@colby.edu").all():
-        claire = User(email = "cyu25@colby.edu")
+        claire = User(email = "cyu25@colby.edu", password_hash = generate_password_hash("claire"))
         db.session.add(claire)
     if not User.query.filter_by(email = "jhsmit25@colby.edu").all():
-        jordan = User(email = "jhsmit25@colby.edu")
+        jordan = User(email = "jhsmit25@colby.edu", password_hash = generate_password_hash("jordan"))
         db.session.add(jordan)
     if not User.query.filter_by(email = "mzhang25@colby.edu").all():
-        ming = User(email = "mzhang25@colby.edu")
+        ming = User(email = "mzhang25@colby.edu", password_hash = generate_password_hash("ming"))
         db.session.add(ming)
     if not User.query.filter_by(email = "tjprat25@colby.edu").all():
-        tim = User(email = "tjprat25@colby.edu")
+        tim = User(email = "tjprat25@colby.edu", password_hash = generate_password_hash("tim"))
         db.session.add(tim)
 
     db.session.commit()
@@ -66,6 +67,17 @@ def contact():
         return render_template('contact.html', admin = True, access_key=access_key)
 
     return render_template('contact.html', admin = False, access_key=access_key)
+
+@main_blueprint.route("/login")
+def login():
+    '''
+    Login Page
+    '''
+    if current_user.is_authenticated and current_user.email:
+        return render_template('index.html', boxes = Box.query.all(),
+            users = User.query.all(), admin = True)
+
+    return render_template('login.html')
 
 
 @main_blueprint.route('/update_box/<int:box_id>', methods=['GET', 'POST'])
