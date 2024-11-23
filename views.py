@@ -177,12 +177,13 @@ def add_user():
     '''
     if request.method == 'POST':
         email = request.form['email']
+        password = request.form['password']
 
         if not email.endswith("@colby.edu"):
             flash('ERROR: Invalid email address! Please use a @colby.edu email.', 'error')
             return redirect(url_for('main.admin'))
 
-        user = User(email = email)
+        user = User(email = email, password_hash = generate_password_hash(password))
         db.session.add(user)
         db.session.commit()
 

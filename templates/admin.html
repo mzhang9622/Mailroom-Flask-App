@@ -56,12 +56,10 @@
                 <div class = box-border-container-2>
                     <b class="font-big">Add New Admin</b>
                     <form method = "POST", action = "{{ url_for('main.add_user')}}"></br>
-                        <div>
-                            <input type="text" class="login-input-text-2" placeholder="email" name="email" required>
-                        </div>
-                        <input type="submit" class ="admin_button" value="Create">
+                        <input type = "text" class="login-input-text-2" placeholder = "Email" name = "email" required>
+                        <input type = "text" class="login-input-text-2" placeholder = "Password" name = "password" required> </br>
+                        <input type = "submit" class ="admin_button" value = "Create">
                     </form>
-
                     {% for category, message in get_flashed_messages(with_categories=True) %}
                     <div class="alert alert-{{category}}">{{ message }}</div>
                     {% endfor %}
