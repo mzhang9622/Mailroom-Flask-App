@@ -54,8 +54,9 @@ def login():
         if user and user.check_password(password):
             login_user(user)
             return redirect(url_for('main.index'))
-        flash('Invalid username or password')
-        return redirect(url_for('auth.login'))
+        else:
+            flash('Invalid username or password')
+            return redirect(url_for('auth.login'))
 
 @auth_blueprint.route('/login_g')
 def login_g():
