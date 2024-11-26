@@ -1,0 +1,622 @@
+@import url('https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;700&display=swap');
+
+
+.root {
+    --text-color: white;
+    --link-color: yellow;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+a {
+    /* Only for now */
+    color: white;
+    font-family: "Libre Franklin";
+    text-decoration: none;
+}
+
+
+
+body{
+    margin: 0px;
+    padding-bottom: 40px;
+    box-sizing: border-box;
+}
+
+
+.top-bar{
+    display: flex;
+    justify-content: flex-end;
+    padding: 20px 40px;
+    gap: 25px;
+    font-family: "Libre Franklin";
+}
+
+
+.top-bar-button {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px;
+    color:white;
+    cursor:pointer;
+    font-family: "Libre Franklin";
+}
+
+.opening-side-by-side-container{ 
+    display: flex;      
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+}
+
+#title-container{
+    margin-left: 5vw;
+    /* margin-top: 5vw; */
+    padding-bottom: 10vh;
+}
+
+.title{
+    color: white;
+    font-size: 10vw;
+    font-family: "Libre Franklin";
+}
+
+#background-photo-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    justify-content: center;
+}
+
+#background-photo-container img {
+    width: 100%;
+    height: auto;
+    align-content: center;
+}
+
+#mule-photo-container{
+    height: auto;
+    flex: display;
+    justify-content: center;
+    width: 40vw;
+    height: auto;
+}
+
+#mule-photo-container img{
+    width: 100%;
+    height: auto;
+    /* justify-content: center; */
+    align-content: center;
+
+}
+
+.barcode-input{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    padding-left: 5vw;
+    padding-bottom: 6vh;
+    padding-top: 10vh;
+    
+}
+
+.barcode-input label{
+    margin-bottom: 8px;
+    font-size: 20px;
+    font-family: "Libre Franklin";
+}
+
+#barcode-text{
+    width: 60vw;               
+    height: 4vh;             
+    color: black;             
+    font-size: 16px;          
+    border: 2px solid rgb(209, 209, 209);
+    border-radius: 5px;       
+    padding: 5px;  
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+    font-family: "Libre Franklin";
+    transition: box-shadow 0.3 ease, transform 0.2 ease;
+}
+
+#barcode-text:focus {
+    outline: none; 
+    border-color: blue; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    transform: translateY(-2px);
+}
+#barcode-text::placeholder{
+    width: 60vw;
+    color: black;
+}
+
+.barcode_container{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.scan_button{
+    width: 10%;               
+    height: 4vh; 
+    cursor: pointer;
+    max-width:400px;
+    background: blue;
+    color: white;
+    font-weight: 600;
+}
+
+.box-title{
+    color: black;
+    /* font-size: 8vh; */
+    font-size: clamp(35px,8vh,9vh);
+    margin-left: 5vw;
+    padding-top: 5vh;
+    font-weight: 600;
+    font-size: 4vw;
+    font-family: "Inter";
+}
+
+.box-side-by-side-container{ 
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+    height: 100%;
+    text-align: left;
+}
+
+.box-photo-container{
+    height: auto;
+    margin-left: 5vw;
+    margin-right: 5vw;
+    width: 25vw;
+    height: auto;
+    /* border: 5px solid rgb(13, 32, 128); */
+}
+
+.box-photo-container img{
+    width: 100%;
+    height: auto;
+    min-width: 130px;
+}
+
+.box-info-container{
+    border: 5px solid rgb(13, 32, 128);
+    padding: 5px;
+    width: 57vw;
+}
+
+#body-background{
+    background: rgb(224, 224, 224);
+    margin-top: 20px;
+    gap: 20px;
+}
+
+.box-border-container{
+    display: flex;
+    flex-direction: column;
+    border: 5px solid white;
+    padding: 5px;
+    width: 40vw;
+    margin-left: 5vw;
+    background-color: #a6b9dc; 
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); 
+}
+
+.box-border-container form {
+    display: flex;
+    flex-direction: column;  
+    align-items: center;       
+}
+
+.parent-background{
+    background: rgb(224, 224, 224);
+    display: flex;   
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-row {
+    display: flex;          
+    align-items: center;   
+    gap: 5px;     
+    font-family:Arial, Helvetica, sans-serif;  
+    margin-left: 80px;    
+}
+
+.box-update-container{
+    display: flex;          
+    align-items: center; 
+    gap: 20px;
+}
+
+.box-update-container form {
+    display: flex;         
+    align-items: center; 
+    margin-right: 5px;
+}
+
+
+.box-photo-container.low-stock {
+    border-color: red; 
+}
+
+.delete-border-container{
+    display: flex;
+    flex-direction: column;
+    border: 5px solid white;
+    margin-top: 5%;
+    padding: 5px;
+    width: 40vw;
+    margin-left: 5vw;
+    background-color: #a6b9dc; 
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); 
+}
+
+/*Beginning of login methods*/
+
+#login-background{
+    width: 100%;
+    background: linear-gradient(to right, rgb(124,221,254),rgb(22,28,89));
+}
+
+
+.login-block-container, #about-block-container, #reset-block-container{
+    width: 100vw;
+    height: 100vh;
+    padding-left: 15%;
+    margin-top: 5%;
+}
+
+#login-block, #about-block, #reset-block{
+    width: 70vw;
+    height: 80vh;
+    background: white;
+    text-align: center;
+}
+
+#login-title{
+    color: blue;
+    padding-top: 7%;
+    font-size: 3vw;
+    line-height: 0;
+    font-family: 'Libre Franklin', sans-serif;
+}
+
+#login-instructions{
+    /* background: red; */
+    font-size: 1vw;
+    margin-top: 80px;
+    line-height: 1;
+    padding: 15px;
+    font-family: 'Libre Franklin', sans-serif;
+}
+
+.login-block-container .login-input-container{
+    margin-top: 0%;
+}
+
+.login-input-box{
+    width: 100%;
+}
+
+
+.login-input-text{
+    padding: 10px;
+    width: 100%;
+    height: 40px;
+    background: rgb(174, 173, 173);
+    color: black;
+    max-width: 400px;
+    margin-top: 5%;
+}
+
+.login-input-text::placeholder{
+    color: black
+}
+
+.password-container{
+    position: relative;
+    width: 100%;
+    max-width: 400px; 
+    margin: 0 auto; 
+}
+
+.password-input-text{
+    width: 100%;
+    height: 40px;
+    background: rgb(174, 173, 173);
+    color: black;
+    margin-top: 5%;
+    padding: 10px;
+}
+
+.password-input-text::placeholder{
+    color: black
+}
+
+
+#show-password{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-5%);
+    right: 1rem;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    width: 1.5rem;
+    display: flex;
+    align-items: center;
+}
+
+#show-password img {
+    width: 100%;
+    height: auto;
+}
+
+.submit_button{
+    margin-top: 5%;
+    cursor: pointer;
+    width: 100%;
+    max-width:400px;
+    height: 4vw;
+    background: blue;
+    color: white;
+    font-size: 2vw;
+    font-weight: 600;
+    margin-bottom: 2vw;
+}
+
+.underline{
+    text-decoration: underline;
+    color: blue;
+    font-weight: bold;
+}
+
+/* Contact */
+
+.contact {
+    padding: 0 50px;
+    margin-bottom: 100px;
+    display: flex;
+    gap: 50px;
+}
+
+#contact-background, #about-background, #reset-background, #settings-background{
+    background: linear-gradient(to right, rgb(124,221,254),rgb(22,28,89));
+    height: 100vh;
+}
+
+.contact-title
+{
+    font-family: "Libre Franklin";
+    text-align: center;
+    font-size: 2vw;
+    color: blue;
+    font-weight: bold;
+    background: white;
+    padding: 0 50px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin: 0 150px;
+    border: 2px solid black;
+    border-bottom: 0px;
+}
+
+.contact-body
+{
+    font-family: "Libre Franklin";
+    text-align: center;
+    font-size: 1vw;
+    background: white;
+    padding: 0 50px;
+    padding-bottom: 10px;
+    margin: 0 150px;
+    margin-bottom: 10px;
+    border: 2px solid black;
+    border-top: 0px;
+}
+
+.contact form{
+    flex: 3;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Can target two different groups in css */
+.contact form input, .contact form textarea {
+    font-family: Verdana, sans-serif;
+    border: 2px solid black;
+    padding: 10px;
+    margin-bottom: 15px;
+    outline: none;
+    resize: none;
+}
+
+.contact form button {
+    font-size: 16px;
+    font-family: Verdana, sans-serif;
+    color: white;
+    background-color: #00b2ff;
+    height: 50px;
+    cursor:pointer;
+    transition: 0.1;
+}
+
+footer {
+    text-align: center;
+    padding: 10px;
+    background-color: #f1f1f1;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    font-size: 14px;
+    color: #555;
+}
+
+
+/* About page methods */
+
+#about-title{
+    align-items: center;
+    text-align: center;
+    font-family: "Libre Franklin";
+    color: blue;
+    padding-top: 25px;
+    font-size: 2vw;
+}
+
+.about-info-header{
+    text-align: left;
+    font-family: "Libre Franklin";
+    padding-left: 5%;
+    padding-top: 25px;
+    font-size: 2vw;
+}
+
+.about-info-list{
+    text-align: left;
+    font-family: "Libre Franklin";
+    padding-left: 10%;
+    /* padding-top: 25px; */
+    font-size: 2vw;
+}
+
+/* Reset page methods */
+#reset-title{
+    align-items: center;
+    text-align: center;
+    font-family: "Libre Franklin";
+    color: blue;
+    padding-top: 25px;
+    font-size: 2vw;
+}
+
+.reset-info-header{
+    text-align: center;
+    font-family: "Libre Franklin";
+    padding-top: 25px;
+    font-size: 2vw;
+}
+
+.text-button {
+    background: none;
+    border: none;
+    color: inherit;           
+    font: inherit;
+    padding: 0;
+    cursor: pointer;
+
+    color:white;
+}
+
+
+/* SETTINGS FILE */
+.settings{
+    padding: 0 50px;
+    margin-bottom: 100px;
+    display: flex;
+    gap: 50px;
+}
+
+
+.box-border-container-2{
+    display: flex;
+    flex-direction: column;
+    border: 5px solid white;
+    margin-top: 5%;
+    padding: 5px;
+    width: 40vw;
+    margin-left: 1.5vw;
+    background-color: #a6b9dc; 
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); 
+}
+
+.login-input-text-2{
+    padding: 10px;
+    width: 100%;
+    height: 40px;
+    background: rgb(255, 255, 255);
+    color: black;
+    max-width: 400px;
+    margin-top: 5%;
+}
+
+.password-input-text-2{
+    padding: 10px;
+    width: 100%;
+    height: 40px;
+    background: rgb(255, 255, 255);
+    color: black;
+    max-width: 400px;
+    margin-top: 5%;
+}
+
+.font-big {
+    font-size: 2vw;
+}
+
+.table {
+    margin-top: 10px;
+    width: 100%;
+}
+
+th, td {
+    padding: 10px; 
+    font-size: 1.5vw;
+    text-align: left;
+}
+
+th {
+   font-size: 20px;
+   font-size: 1.8vw;
+   max-width: 400px;
+}
+
+.admin_button{
+    margin-top: 5%;
+    cursor: pointer;
+    width: 100%;
+    max-width:400px;
+    height: 4vw;
+    background: rgb(178, 200, 212);
+    color: rgb(0, 0, 0);
+    font-size: 1.5vw;
+    font-weight: 600;
+    margin-bottom: 2vw;
+}
+
+.alert-warning {
+    padding: 12px;
+    margin-top: 20px;
+    border-radius: 3px;
+    width: 80vw;
+    font-size: 1vw;
+    margin-bottom: 16px;
+    background-color: rgb(247, 247, 141);
+    color: black;
+    font-family:Georgia, 'Times New Roman', Times, serif;
+  }
+
+  .alert-error {
+    color: red;
+    background-color: rgb(255, 255, 255);
+    font-family:Georgia, 'Times New Roman', Times, serif;
+  }

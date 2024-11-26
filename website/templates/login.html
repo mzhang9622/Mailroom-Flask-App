@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Login</title>
+        <link rel="stylesheet" href="../static/style.css">
+        <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;700&display=swap"> -->
+    </head>
+
+
+
+    <body>
+        <div id="login-background">
+
+            <div class="top-bar">
+                <div class="top-bar-button">
+                    <a href="/">
+                        <span>Home</span>
+                    </a>
+                </div>
+                <div class="top-bar-button">
+                    <a href="/about">
+                        <span>About</span>
+
+                    </a>
+                </div>
+                <div class="top-bar-button">
+                    <a href="/contact">
+                        <span>Contact</span>
+                    </a>
+                </div>
+                <div class="top-bar-button">
+                    <a href="/login">
+                        <span>Login</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="login-block-container">
+                <div id="login-block">
+                    <div id="login-title">
+                        <h1>Login</h1>
+                    </div>
+
+                    <div id="login-instructions">
+                        <h1>Sign in to your account</h1>
+                    </div>
+
+                    {% for category, message in get_flashed_messages(with_categories=True) %}
+                        <div class="alert alert-{{category}}">{{ message }}</div>
+                    {% endfor %}
+
+                    <div class="login-input-container">
+                        <form method="POST">
+                            <div>
+                                <input type="text" class="login-input-text" placeholder="email" name="email">
+                            </div>
+                            <div class = "password-container">
+                                <input type="password" class = "password-input-text" placeholder="password" name="password"> 
+                               
+                                <button type = "button"  id = "show-password">
+                                    <img src = "./static/images/eye-slash-regular.svg" alt = "Show Password"/>
+                                </button>
+                            </div>
+                            <input type="submit" class ="submit_button" value="Login">
+                        </form>
+
+                        <div id="login-input-container">
+                            Sign in with Google:
+                            <a href="/login_g" class = "underline">Click Here.</a>
+                        </div>
+                        
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+        <script src="../static/script.js"></script>
+    </body>
+
+    <footer>
+        <p>&copy; <span id="year"></span> HashMap OverFlow. All rights reserved.</p>
+    </footer>
+</html>

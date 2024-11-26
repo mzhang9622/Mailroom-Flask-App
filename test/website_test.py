@@ -6,24 +6,20 @@ import io
 import sys
 import sqlite3
 import pytest
-from website import website
-from website import db
-from models import Box
-from models import User
-#from flask import url_for
-#from website import User
+from website import create_app, db
+from website.models import Box, User
 
-@pytest.fixture
-def client():
-    """
-    Test client fixture for simulating requests.
-    """
-    website.config['TESTING'] = True
-    website.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'  # In-memory DB for testing
-    with website.test_client() as client:
-        with website.app_context():
-            db.create_all()  # Create tables for testing
-        yield client
+# @pytest.fixture
+# def client():
+#     """
+#     Test client fixture for simulating requests.
+#     """
+#     website.config['TESTING'] = True
+#     website.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'  # In-memory DB for testing
+#     with website.test_client() as client:
+#         with website.app_context():
+#             db.create_all()  # Create tables for testing
+#         yield client
 
 
 def test_login_success(client):

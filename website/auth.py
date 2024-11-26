@@ -4,23 +4,17 @@ auth.py
 
 import os
 import requests
-from flask_login import login_user
-from flask_login import login_required
-from flask_login import logout_user
+from flask_login import login_user, login_required, logout_user
 from pip._vendor import cachecontrol
 from google_auth_oauthlib.flow import Flow
 from google.oauth2 import id_token
 import google.auth.transport.requests
-from flask import Blueprint
-from flask import redirect
-from flask import url_for
-from flask import request
-from flask import flash
-from flask import session
-from flask import abort
-from models import User
+from flask import Blueprint, redirect, url_for
+from flask import request, flash, session, abort
+from .models import User
 
 auth_blueprint = Blueprint('auth', __name__)
+
 if os.environ.get('REDIRECT') == "http://127.0.0.1:5000/callback":
     os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
 
