@@ -6,6 +6,8 @@ Initial creation of web application requested by the Mailroom Center at Colby Co
 - Web Application works on various Media Screen sizes
 - Incrementing/Decrementing Box Quantities
 - Contact Page using an API
+- Email Notifications using an API
+- Google Authentication for login using API
 - Able to Toggle Password (hidden/seen)
 - Add/Delete Admins
 - Add/Delete Boxes
@@ -19,8 +21,8 @@ Initial creation of web application requested by the Mailroom Center at Colby Co
 `venv source venv/bin/activate` 
 - On Windows, use `venv\Scripts\activate`
 
-3. Run the website:
-`python / python3 website.py`
+3. Run the app:
+`python / python3 app.py`
 
 4. Open the browser and navigate to `http://127.0.0.1:5000`
 

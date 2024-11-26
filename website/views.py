@@ -3,18 +3,13 @@ views.py
 '''
 
 import os
-from flask import Blueprint
-from flask import render_template
+from flask import Blueprint, render_template, redirect, url_for
 from flask import request
-from flask import redirect
-from flask import url_for
 from flask import flash
-from flask_login import current_user
-from flask_login import login_required
-from models import db
-from models import User
-from models import Box
-from util import send_email
+from flask_login import current_user, login_required
+from website import db
+from .models import User, Box
+from .util import send_email
 from werkzeug.security import generate_password_hash
 
 main_blueprint = Blueprint('main', __name__)
