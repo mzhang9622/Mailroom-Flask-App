@@ -27,7 +27,7 @@ a {
 
 body{
     margin: 0px;
-    padding-bottom: 40px;
+    /* padding-bottom: 40px; */
     box-sizing: border-box;
 }
 
@@ -276,16 +276,17 @@ body{
 }
 
 
-.login-block-container, #about-block-container, #reset-block-container{
+.login-block-container {
     width: 100vw;
     height: 100vh;
     padding-left: 15%;
     margin-top: 5%;
 }
 
-#login-block, #about-block, #reset-block{
+#login-block, #about-block{
     width: 70vw;
     height: 80vh;
+    text-align: center;  
     background: white;
     text-align: center;
 }
@@ -400,6 +401,11 @@ body{
 #contact-background, #about-background, #reset-background, #settings-background{
     background: linear-gradient(to right, rgb(124,221,254),rgb(22,28,89));
     height: 100vh;
+}
+
+#about-background {
+    padding-bottom: 10px;
+    padding-left: 150px;
 }
 
 .contact-title
@@ -619,4 +625,20 @@ th {
     color: red;
     background-color: rgb(255, 255, 255);
     font-family:Georgia, 'Times New Roman', Times, serif;
+  }
+
+  @media(max-width: 768px) {
+    .settings{
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .box-border-container-2, .delete-border-container {
+        width: 80%;         
+    }
+    
+    .delete-border-container{
+        margin-top: -20px;
+        margin-left: 6px;
+    }
   }

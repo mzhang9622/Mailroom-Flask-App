@@ -49,7 +49,7 @@ def login():
             login_user(user)
             return redirect(url_for('main.index'))
         else:
-            flash('Invalid username or password')
+            flash('Invalid username or password', "error")
             return redirect(url_for('auth.login'))
 
 @auth_blueprint.route('/login_g')
