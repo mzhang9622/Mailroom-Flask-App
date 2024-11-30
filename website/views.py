@@ -97,6 +97,10 @@ def update_box(box_id):
         if quantity == '':
             quantity = 0
 
+        if int(quantity) > 1000:
+            flash(f'WARNING: Amount entered is too high!', 'warning')
+            quantity = 0
+
         box.quantity += int(quantity)
         box.quantity = max(box.quantity, 0)
 
@@ -163,7 +167,7 @@ def add_box():
         size = request.form['size']
         link = request.form['link']
         image = request.files['image']
-        image.save("static/images/" + image.filename)
+        image.save("website/static/images/" + image.filename)
         low_stock = request.form['low_stock']
         barcode = request.form['barcode']
         box = Box(name = name, quantity = quantity, size = size, link = link,
