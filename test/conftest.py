@@ -1,5 +1,11 @@
 import os
 import pytest
+
+import sys
+# sys.path.append(os.path.abspath("/Users/jordansmith/Desktop/CS321/group-sprint-2/Mailroom-Flask-App/website"))
+
+sys.path.append('/Users/jordansmith/Desktop/CS321/group-sprint-2/Mailroom-Flask-App')
+
 from website import create_app, db
 from flask import session
 
