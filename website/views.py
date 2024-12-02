@@ -9,6 +9,7 @@ from flask import url_for
 from flask import render_template
 from flask import request
 from flask import flash
+from flask import jsonify
 from flask_login import current_user
 from flask_login import login_required
 from website import db
@@ -84,24 +85,24 @@ def login():
     return render_template('login.html')
 
 
-@main_blueprint.route('/update_box/<int:box_id>', methods=['GET', 'POST'])
+@main_blueprint.route('/update_box/<int:box_id>', methods=['POST'])
 @login_required
 def update_box(box_id):
     '''
     Update Boxes
     '''
-    if request.method == 'POST':
-        box = Box.query.get(box_id)
-        quantity = request.form['quantity']
+    box = Box.query.get(box_id)
+    if not box:
+        return jsonify({'success': False, 'message': 'Box not found'})
 
-        if quantity == '':
-            quantity = 0
+    quantity = request.json.get('quantity', 0)
 
-        if int(quantity) > 1000:
-            flash(f'WARNING: Amount entered is too high!', 'warning')
-            quantity = 0
+    try:
+        quantity = int(quantity)
+        if quantity > 1000:
+            return jsonify({'success': False, 'message': 'Amount entered is too high!'})
 
-        box.quantity += int(quantity)
+        box.quantity += quantity
         box.quantity = max(box.quantity, 0)
 
         if box.quantity <= box.low_stock:
@@ -123,21 +124,27 @@ def update_box(box_id):
 
         db.session.commit()
 
-    return redirect(url_for('main.index'))
+        return jsonify({'success': True, 'new_quantity': box.quantity})
+    
+    except ValueError:
+        return jsonify({'success': False, 'message': 'Invalid quantity value'})
 
 
-@main_blueprint.route('/delete_box/<int:box_id>', methods=['GET', 'POST'])
+
+@main_blueprint.route('/delete_box/<int:box_id>', methods=['POST'])
 @login_required
 def delete_box(box_id):
     '''
     Delete Boxes
     '''
-    if request.method == 'POST':
-        box = Box.query.get(box_id)
-        db.session.delete(box)
-        db.session.commit()
+    box = Box.query.get(box_id)
+    if not box:
+        return jsonify({'success': False, 'message': 'Box not found'})
 
-    return redirect(url_for('main.index'))
+    db.session.delete(box)
+    db.session.commit()
+
+    return jsonify({'success': True})
 
 @main_blueprint.route('/delete_admin/<int:user_id>', methods=['GET', 'POST'])
 @login_required
@@ -207,3 +214,36 @@ def admin():
         return render_template('admin.html',  users = User.query.all(), admin = True)
     return render_template('index.html', boxes = Box.query.all(),
         users = User.query.all(), admin = False)
+
+@main_blueprint.route('/scan_box', methods=['GET', 'POST'])
+@login_required
+def scan_box():
+    '''
+    Scan Boxes
+    '''
+    if request.method == 'POST':
+        barcode = request.form['barcode']
+        box = Box.query.filter_by(barcode = barcode).first()
+        box.quantity -= 1
+        box.quantity = max(box.quantity, 0)
+
+        if box.quantity <= box.low_stock:
+            flash(f'WARNING: {box.name} is low in stock!', 'warning')
+            email_content = f"""
+                <p>Dear Admin,</p>
+                <p>The stock for <strong>{box.name}</strong> is running low.</p>
+                <ul>
+                    <li>Current Quantity: {box.quantity}</li>
+                    <li>Low Stock Threshold: {box.low_stock}</li>
+                </ul>
+                <p>Please restock soon.</p>
+            """
+            send_email(
+                subject=f"Low Stock Alert: {box.name}",
+                to_email='mzhang9622@gmail.com',
+                html_content=email_content
+            )
+
+        db.session.commit()
+
+    return redirect(url_for('main.index'))
