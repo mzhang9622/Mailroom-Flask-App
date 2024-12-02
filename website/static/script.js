@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const boxId = this.dataset.boxId;
             const quantity = this.querySelector('input[name="quantity"]').value;
 
-            fetch('/update_box/${boxId}', {
+            fetch(`/update_box/${boxId}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
             const boxId = this.dataset.boxId;
 
-            fetch('/delete_box/${boxId}', {
+            fetch(`/delete_box/${boxId}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
