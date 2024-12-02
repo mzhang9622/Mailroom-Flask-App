@@ -7,15 +7,15 @@ import random
 import string
 import sys
 import sqlite3
-import pytest
-
-import sys
 import os
-sys.path.append(os.path.abspath("/Users/jordansmith/Desktop/CS321/group-sprint-2/Mailroom-Flask-App/website"))
-
-from website import create_app, db
-from website.models import Box, User
 from werkzeug.security import generate_password_hash
+from website import create_app
+from website import db
+from website.models import Box
+from website.models import User
+
+sys.path.append(os.path.abspath(
+    "/Users/jordansmith/Desktop/CS321/group-sprint-2/Mailroom-Flask-App/website"))
 
 # @pytest.fixture
 # def client():
@@ -39,10 +39,10 @@ def test_login_success(test_client):
     app = create_app()
     with app.app_context():
         if not User.query.filter_by(email = "jhsmit25@colby.edu").all():
-            user = User(email = "jhsmit25@colby.edu", password_hash = generate_password_hash('jordan'))
+            user = User(email = "jhsmit25@colby.edu",
+                        password_hash = generate_password_hash('jordan'))
             db.session.add(user)
             db.session.commit()
-
 
     # Simulate a POST request to /login with valid credentials    
     response = test_client.post(
@@ -240,7 +240,8 @@ def test_increase_box(test_client):
     #Check that system can handle overflow
     with app.app_context():
         init_quan = Box.query.get(1).quantity
-    response = test_client.post('/update_box/1', data={"quantity": str(sys.maxsize)}, follow_redirects=True)
+    response = test_client.post('/update_box/1',
+                                data={"quantity": str(sys.maxsize)}, follow_redirects=True)
     assert response.status_code == 200
     with app.app_context():
         assert Box.query.get(1).quantity != init_quan+sys.maxsize
@@ -271,7 +272,8 @@ def test_decrease_box_admin(test_client):
     #Check that system can handle overflow
     with app.app_context():
         init_quan = Box.query.get(1).quantity
-    response = test_client.post('/update_box/1', data={"quantity": str(-sys.maxsize)}, follow_redirects=True)
+    response = test_client.post('/update_box/1',
+                                data={"quantity": str(-sys.maxsize)}, follow_redirects=True)
     assert response.status_code == 200
     with app.app_context():
         assert Box.query.get(1).quantity != init_quan-sys.maxsize
@@ -310,7 +312,7 @@ def test_delete_box(test_client):
     response = test_client.post('/delete_box/1', follow_redirects=True)
     assert response.status_code == 200
     with app.app_context():
-        assert Box.query.get(1) == None
+        assert Box.query.get(1) is None
 
 def test_delete_admin_success(test_client):
     '''
@@ -329,7 +331,6 @@ def test_delete_admin_success(test_client):
         init_user = User.query.filter_by(email = "cyu25@colby.edu").first()
     
     print(init_user.id)
-
     response = test_client.post('/delete_admin/' + str(init_user.id), follow_redirects=True)
     #Should be taken to main.admin
     assert response.status_code == 200
@@ -337,7 +338,7 @@ def test_delete_admin_success(test_client):
     assert b"Delete Admin" in response.data
 
     with app.app_context():
-        assert User.query.get(init_user.id) == None
+        assert User.query.get(init_user.id) is None
 
 
 def test_delete_yourself_failure(test_client):
@@ -391,16 +392,17 @@ def test_add_box(test_client):
     #Check if database is empty
     init_max = cursor.fetchone()[0]
     
-
     response = test_client.post('/add_box',
                 data={
-                'name': 'Test: ' + ''.join(random.choice(string.ascii_lowercase) for _ in range(12)),
+                'name': 'Test: ' + ''.join(random.choice(string.ascii_lowercase)
+                                           for _ in range(12)),
                 'quantity': 'test',
                 'size': 'test',
                 'link':  'test',
                 'image':  fake_file,
                 'low_stock':  5,
-                'barcode': 'P' + ''.join(random.choice(string.ascii_lowercase) for _ in range(12))
+                'barcode': 'P' + ''.join(random.choice(string.ascii_lowercase)
+                                         for _ in range(12))
                 },
             content_type='multipart/form-data',
             follow_redirects=True

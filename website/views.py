@@ -12,11 +12,11 @@ from flask import flash
 from flask import jsonify
 from flask_login import current_user
 from flask_login import login_required
+from werkzeug.security import generate_password_hash
 from website import db
 from .models import User
 from .models import Box
 from .util import send_email
-from werkzeug.security import generate_password_hash
 
 main_blueprint = Blueprint('main', __name__)
 
@@ -125,7 +125,6 @@ def update_box(box_id):
         db.session.commit()
 
         return jsonify({'success': True, 'new_quantity': box.quantity})
-    
     except ValueError:
         return jsonify({'success': False, 'message': 'Invalid quantity value'})
 
