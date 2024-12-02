@@ -66,8 +66,10 @@
                 <div class="barcode-input">
                     <label for="barcode-text"><b>Scan Box Barcode Here</b></label>
                     <div class = "barcode_container">
-                        <input id="barcode-text" type="text">
-                        <input type="submit" class ="scan_button" value="Scan">
+                        <form method = "POST" action = "{{ url_for('main.scan_box')}}">
+                            <input type = "text" name = "barcode" id = "barcode-text">
+                            <input type = "submit" value = "Scan" class = "scan_button">
+                        </form>
                     </div>
                 </div>
                 {% endif %}
@@ -99,32 +101,35 @@
                 {% endfor %}
 
                 {% for box in boxes %}
-                <div class="box-title">
-                    {{ box.name }}
-                </div>
-        
-                <div class="box-side-by-side-container">
-                    <div class="box-photo-container">
-                        <img src="/static/images/{{  box.image }}" alt="Wrong file path">
+                <div class="box-loop">
+                    <div class="box-title">
+                        {{ box.name }}
                     </div>
-                    {% if admin == True %}
-                    <div class = box-update-container>
-                        <form method = "POST", action = "{{ url_for('main.update_box', box_id = box.id) }}">
-                            <input type = "number" placeholder = "Enter # to + or -" name = "quantity">
-                            <input type = "submit" value = "Submit">
-                        </form>
-                    
-                        <form method = "POST", action = "{{ url_for('main.delete_box', box_id = box.id) }}">
-                            <input type = "submit" value = "Delete Box">
-                        </form>
-                    </div>
-                    {% endif %}
 
-                    <div class="box-info-container">
-                        Name: {{ box.name }}<br>
-                        Quantity: {{ box.quantity }}<br>
-                        Size: {{ box.size }}<br>
-                        Link: <a href = "{{ box.link }}">{{ box.link }}</a>
+                    <div class="box-side-by-side-container">
+                        <div class="box-photo-container">
+                            <img src="/static/images/{{  box.image }}" alt="Wrong file path">
+                        </div>
+                        
+                        {% if admin == True %}
+                        <div class="box-update-container">
+                            <form class="update-form" data-box-id="{{ box.id }}">
+                                <input type="number" placeholder="Enter # to + or -" name="quantity" required>
+                                <input type="submit" value="Submit">
+                            </form>
+
+                            <form class="delete-form" data-box-id="{{ box.id }}">
+                                <input type="submit" value="Delete Box">
+                            </form>
+                        </div>
+                        {% endif %}
+
+                        <div class="box-info-container">
+                            Name: {{ box.name }}<br>
+                            Quantity: <span class="box-quantity">{{ box.quantity }}</span><br>
+                            Size: {{ box.size }}<br>
+                            Link: <a href="{{ box.link }}">{{ box.link }}</a>
+                        </div>
                     </div>
                 </div>
                 {% endfor %}

@@ -14,7 +14,7 @@ function confirmDelete(event) {
     }
 }
 
-/* FOR SCROLLING */
+/* FOR REFRESH */
 window.onbeforeunload = function() {
     sessionStorage.setItem('scroll_pos', window.scrollY);
 };
@@ -28,6 +28,55 @@ window.onload = function() {
     }
 };
 
+/* FOR PREVENTING SCROLLING */
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.update-form').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const boxId = this.dataset.boxId;
+            const quantity = this.querySelector('input[name="quantity"]').value;
+
+            fetch(`/update_box/${boxId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ quantity: quantity })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const boxQuantity = this.closest('.box-side-by-side-container').querySelector('.box-quantity');
+                    boxQuantity.textContent = data.new_quantity;
+                } else {
+                    alert(data.message);
+                }
+            });
+        });
+    });
+
+    document.querySelectorAll('.delete-form').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const boxId = this.dataset.boxId;
+
+            fetch(`/delete_box/${boxId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    this.closest('.box-loop').remove();
+                } else {
+                    alert(data.message);
+                }
+            });
+        });
+    });
+});
 
 /* TO ALLOW USERS TO SEE PASSWORDS TYPED */
 function togglePassword() {

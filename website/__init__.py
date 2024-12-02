@@ -10,11 +10,12 @@ from flask_sqlalchemy import SQLAlchemy
 
 load_dotenv()
 
-
 db = SQLAlchemy()
 
 def create_app(): 
-
+    '''
+    Create App
+    '''
     app = Flask(__name__)
 
     # check if testing, otherwise run per usual
@@ -35,7 +36,6 @@ def create_app():
     from .views import main_blueprint
     from .auth import auth_blueprint
     
-
     @login_manager.user_loader
     def load_user(user_id):
         '''
