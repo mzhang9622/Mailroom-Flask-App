@@ -204,6 +204,13 @@ body{
     gap: 20px;
 }
 
+#admin-body-background{
+    background: rgb(224, 224, 224);
+    margin-top: 20px;
+    gap: 20px;
+    padding-bottom: 50px;
+}
+
 .box-border-container{
     display: flex;
     flex-direction: column;
@@ -474,6 +481,7 @@ footer {
     left: 0;
     font-size: 14px;
     color: #555;
+    margin-top: 200px;
 }
 
 
