@@ -31,6 +31,10 @@ body{
     box-sizing: border-box;
 }
 
+body.admin{
+    display: flex;
+}
+
 
 .top-bar{
     display: flex;
@@ -277,13 +281,14 @@ body{
 
 /*Beginning of login methods*/
 
-#login-background{
+#login-background, #settings-background {
     width: 100%;
+    min-height: 100%;
     background: linear-gradient(to right, rgb(124,221,254),rgb(22,28,89));
 }
 
 
-.login-block-container {
+.login-block-container, .about-block-conainter {
     width: 100vw;
     height: 100vh;
     padding-left: 15%;
@@ -405,14 +410,14 @@ body{
     gap: 50px;
 }
 
-#contact-background, #about-background, #reset-background, #settings-background{
+#contact-background, #reset-background, #about-background{
     background: linear-gradient(to right, rgb(124,221,254),rgb(22,28,89));
     height: 100vh;
 }
 
 #about-background {
     padding-bottom: 10px;
-    padding-left: 150px;
+    padding-left: 14%;
 }
 
 .contact-title
@@ -509,7 +514,7 @@ footer {
     font-family: "Libre Franklin";
     padding-left: 10%;
     /* padding-top: 25px; */
-    font-size: 2vw;
+    font-size: 1.5vw;
 }
 
 /* Reset page methods */
