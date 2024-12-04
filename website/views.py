@@ -185,8 +185,16 @@ def add_box():
             flash('ERROR: Barcode already exists in database!', 'error')
             return redirect(url_for('main.index'))
         
-        box = Box(name = name, quantity = max(quantity, 0), size = size, link = link,
-                image = image.filename, low_stock = max(low_stock, 0), barcode = barcode)
+        if int(quantity) < 0:
+            flash('ERROR: Box count cannot be negative!', 'error')
+            return redirect(url_for('main.index'))
+        
+        if int(low_stock) < 0:
+            flash('ERROR: Low stock number cannot be negative!', 'error')
+            return redirect(url_for('main.index'))
+        
+        box = Box(name = name, quantity = quantity, size = size, link = link,
+                image = image.filename, low_stock = low_stock, barcode = barcode)
         db.session.add(box)
         db.session.commit()
 
