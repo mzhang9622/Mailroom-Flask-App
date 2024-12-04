@@ -176,8 +176,17 @@ def add_box():
         image.save("website/static/images/" + image.filename)
         low_stock = request.form['low_stock']
         barcode = request.form['barcode']
-        box = Box(name = name, quantity = quantity, size = size, link = link,
-                image = image.filename, low_stock = low_stock, barcode = barcode)
+
+        if Box.query.filter_by(name = name).first():
+            flash('ERROR: Box name already exists in database!', 'error')
+            return redirect(url_for('main.index'))
+        
+        if Box.query.filter_by(barcode = barcode).first():
+            flash('ERROR: Barcode already exists in database!', 'error')
+            return redirect(url_for('main.index'))
+        
+        box = Box(name = name, quantity = max(quantity, 0), size = size, link = link,
+                image = image.filename, low_stock = max(low_stock, 0), barcode = barcode)
         db.session.add(box)
         db.session.commit()
 
@@ -192,6 +201,10 @@ def add_user():
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
+
+        if User.query.filter_by(email = email).first():
+            flash('ERROR: There is already an admin with that email!', 'error')
+            return redirect(url_for('main.admin'))
 
         if not email.endswith("@colby.edu"):
             flash('ERROR: Invalid email address! Please use a @colby.edu email.', 'error')
@@ -222,6 +235,11 @@ def scan_box():
     '''
     if request.method == 'POST':
         barcode = request.form['barcode']
+
+        if not Box.query.filter_by(barcode = barcode).first():
+            flash('ERROR: Barcode does not exist in database!', 'error')
+            return redirect(url_for('main.index'))
+        
         box = Box.query.filter_by(barcode = barcode).first()
         box.quantity -= 1
         box.quantity = max(box.quantity, 0)
