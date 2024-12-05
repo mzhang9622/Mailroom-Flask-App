@@ -20,7 +20,7 @@ Completed web application requested by the Mailroom Center at Colby College for 
 `pip install -r requirements.txt`
 
 2. Create the virtual environment:
-`python3 -m venv`
+`python3 -m venv venv`
 `venv source venv/bin/activate` 
 - On Windows, use `venv\Scripts\activate`
 
