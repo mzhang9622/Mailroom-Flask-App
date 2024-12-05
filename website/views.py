@@ -84,6 +84,55 @@ def login():
 
     return render_template('login.html')
 
+@main_blueprint.route('/admin', methods =['GET'])
+@login_required
+def admin():
+    '''
+    Admin Page
+    '''
+    if current_user.is_authenticated and current_user.email:
+        return render_template('admin.html',  users = User.query.all(), admin = True)
+    return render_template('index.html', boxes = Box.query.all(),
+        users = User.query.all(), admin = False)
+
+@main_blueprint.route('/add_box', methods=['GET', 'POST'])
+@login_required
+def add_box():
+    '''
+    Add Boxes
+    '''
+    if request.method == 'POST':
+        name = request.form['name']
+        quantity = request.form['quantity']
+        size = request.form['size']
+        link = request.form['link']
+        image = request.files['image']
+        image.save("website/static/images/" + image.filename)
+        low_stock = request.form['low_stock']
+        barcode = request.form['barcode']
+
+        if Box.query.filter_by(name = name).first():
+            flash('ERROR: Box name already exists in database!', 'error')
+            return redirect(url_for('main.index'))
+        
+        if Box.query.filter_by(barcode = barcode).first():
+            flash('ERROR: Barcode already exists in database!', 'error')
+            return redirect(url_for('main.index'))
+        
+        if int(quantity) < 0:
+            flash('ERROR: Box count cannot be negative!', 'error')
+            return redirect(url_for('main.index'))
+        
+        if int(low_stock) < 0:
+            flash('ERROR: Low stock number cannot be negative!', 'error')
+            return redirect(url_for('main.index'))
+        
+        box = Box(name = name, quantity = quantity, size = size, link = link,
+                image = image.filename, low_stock = low_stock, barcode = barcode)
+        db.session.add(box)
+        db.session.commit()
+
+    return redirect(url_for('main.index'))
 
 @main_blueprint.route('/update_box/<int:box_id>', methods=['POST'])
 @login_required
@@ -128,113 +177,6 @@ def update_box(box_id):
     except ValueError:
         return jsonify({'success': False, 'message': 'Invalid quantity value'})
 
-
-
-@main_blueprint.route('/delete_box/<int:box_id>', methods=['POST'])
-@login_required
-def delete_box(box_id):
-    '''
-    Delete Boxes
-    '''
-    box = Box.query.get(box_id)
-    if not box:
-        return jsonify({'success': False, 'message': 'Box not found'})
-
-    db.session.delete(box)
-    db.session.commit()
-
-    return jsonify({'success': True})
-
-@main_blueprint.route('/delete_admin/<int:user_id>', methods=['GET', 'POST'])
-@login_required
-def delete_admin(user_id):
-    '''
-    Delete Admins
-    '''
-    if request.method == 'POST':
-        user = User.query.get(user_id)
-        if (user.email != current_user.email) and (db.session.query(User).count() != 1):
-            print(current_user)
-            db.session.delete(user)
-            db.session.commit()
-
-    return redirect(url_for('main.admin'))
-
-
-@main_blueprint.route('/add_box', methods=['GET', 'POST'])
-@login_required
-def add_box():
-    '''
-    Add Boxes
-    '''
-    if request.method == 'POST':
-        name = request.form['name']
-        quantity = request.form['quantity']
-        size = request.form['size']
-        link = request.form['link']
-        image = request.files['image']
-        image.save("website/static/images/" + image.filename)
-        low_stock = request.form['low_stock']
-        barcode = request.form['barcode']
-
-        if Box.query.filter_by(name = name).first():
-            flash('ERROR: Box name already exists in database!', 'error')
-            return redirect(url_for('main.index'))
-        
-        if Box.query.filter_by(barcode = barcode).first():
-            flash('ERROR: Barcode already exists in database!', 'error')
-            return redirect(url_for('main.index'))
-        
-        if int(quantity) < 0:
-            flash('ERROR: Box count cannot be negative!', 'error')
-            return redirect(url_for('main.index'))
-        
-        if int(low_stock) < 0:
-            flash('ERROR: Low stock number cannot be negative!', 'error')
-            return redirect(url_for('main.index'))
-        
-        box = Box(name = name, quantity = quantity, size = size, link = link,
-                image = image.filename, low_stock = low_stock, barcode = barcode)
-        db.session.add(box)
-        db.session.commit()
-
-    return redirect(url_for('main.index'))
-
-@main_blueprint.route('/add_user', methods=['GET', 'POST'])
-@login_required
-def add_user():
-    '''
-    Add Users
-    '''
-    if request.method == 'POST':
-        email = request.form['email']
-        password = request.form['password']
-
-        if User.query.filter_by(email = email).first():
-            flash('ERROR: There is already an admin with that email!', 'error')
-            return redirect(url_for('main.admin'))
-
-        if not email.endswith("@colby.edu"):
-            flash('ERROR: Invalid email address! Please use a @colby.edu email.', 'error')
-            return redirect(url_for('main.admin'))
-
-        user = User(email = email, password_hash = generate_password_hash(password))
-        db.session.add(user)
-        db.session.commit()
-
-    return redirect(url_for('main.admin'))
-
-@main_blueprint.route('/admin', methods =['GET'])
-@login_required
-def admin():
-    '''
-    Admin Page
-    '''
-    if current_user.is_authenticated and current_user.email:
-        return render_template('admin.html',  users = User.query.all(), admin = True)
-    return render_template('index.html', boxes = Box.query.all(),
-        users = User.query.all(), admin = False)
-
 @main_blueprint.route('/scan_box', methods=['GET', 'POST'])
 @login_required
 def scan_box():
@@ -272,3 +214,57 @@ def scan_box():
         db.session.commit()
 
     return redirect(url_for('main.index'))
+
+@main_blueprint.route('/delete_box/<int:box_id>', methods=['POST'])
+@login_required
+def delete_box(box_id):
+    '''
+    Delete Boxes
+    '''
+    box = Box.query.get(box_id)
+    if not box:
+        return jsonify({'success': False, 'message': 'Box not found'})
+
+    db.session.delete(box)
+    db.session.commit()
+
+    return jsonify({'success': True})
+
+@main_blueprint.route('/add_user', methods=['GET', 'POST'])
+@login_required
+def add_user():
+    '''
+    Add Users
+    '''
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+
+        if User.query.filter_by(email = email).first():
+            flash('ERROR: There is already an admin with that email!', 'error')
+            return redirect(url_for('main.admin'))
+
+        if not email.endswith("@colby.edu"):
+            flash('ERROR: Invalid email address! Please use a @colby.edu email.', 'error')
+            return redirect(url_for('main.admin'))
+
+        user = User(email = email, password_hash = generate_password_hash(password))
+        db.session.add(user)
+        db.session.commit()
+
+    return redirect(url_for('main.admin'))
+
+@main_blueprint.route('/delete_admin/<int:user_id>', methods=['GET', 'POST'])
+@login_required
+def delete_admin(user_id):
+    '''
+    Delete Admins
+    '''
+    if request.method == 'POST':
+        user = User.query.get(user_id)
+        if (user.email != current_user.email) and (db.session.query(User).count() != 1):
+            print(current_user)
+            db.session.delete(user)
+            db.session.commit()
+
+    return redirect(url_for('main.admin'))
