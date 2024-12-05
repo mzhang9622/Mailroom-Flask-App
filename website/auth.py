@@ -18,10 +18,12 @@ from flask import request
 from flask import flash
 from flask import session
 from flask import abort
-from models import User
+from .models import User
 
 auth_blueprint = Blueprint('auth', __name__)
-os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
+
+if os.environ.get('REDIRECT') == "http://127.0.0.1:5000/callback":
+    os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
 
 GOOGLE_CLIENT_ID = os.environ.get('GOOGLE_CLIENT_ID')
 GOOGLE_CLIENT_SECRET = os.environ.get('GOOGLE_CLIENT_SECRET')
@@ -31,7 +33,6 @@ flow = Flow.from_client_config(
         "web": {
             "client_id": GOOGLE_CLIENT_ID,
             "client_secret": GOOGLE_CLIENT_SECRET,
-            "redirect_uris": "https://mailroom-flask-app-83e87278f3b9.herokuapp.com/callback",
             "auth_uri": "https://accounts.google.com/o/oauth2/auth",
             "token_uri": "https://oauth2.googleapis.com/token",
         }
@@ -42,10 +43,25 @@ flow = Flow.from_client_config(
     redirect_uri = os.environ.get('REDIRECT')
 )
 
-@auth_blueprint.route('/login')
+@auth_blueprint.route('/login', methods=['GET', 'POST'])
 def login():
     '''
     Login
+    '''
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        user = User.query.filter_by(email=email).first()
+        if user and user.check_password(password):
+            login_user(user)
+            return redirect(url_for('main.index'))
+        flash('Invalid username or password', "error")
+        return redirect(url_for('auth.login'))
+
+@auth_blueprint.route('/login_g')
+def login_g():
+    '''
+    Google Login
     '''
     authorization_url, state = flow.authorization_url()
     session["state"] = state
