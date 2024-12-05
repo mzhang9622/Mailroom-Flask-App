@@ -97,3 +97,35 @@ function togglePassword() {
 
 }
 togglePassword();
+
+/* Barcode Scanner Integration */
+document.addEventListener("DOMContentLoaded", function () {
+    const reader = new Html5Qrcode("reader");
+    const resultElement = document.getElementById("scan-result");
+    const barcodeInput = document.getElementById("barcode-text");
+    function startScanning() {
+        reader.start(
+            { facingMode: "environment" },
+            {
+                fps: 10,
+                qrbox: { width: 250, height: 250 }
+            },
+            (decodedText) => {
+                console.log("Scanned code:", decodedText);
+                resultElement.innerHTML = `<b>Scanned Code:</b> ${decodedText}`;
+                if (barcodeInput) barcodeInput.value = decodedText;
+            },
+            (errorMessage) => {
+                console.log("Scan error:", errorMessage);
+            }
+        ).catch((err) => {
+            console.error("Failed to start barcode scanner:", err);
+        });
+    }
+    function stopScanning() {
+        reader.stop();
+    }
+    document.getElementById("start-scanner").addEventListener("click", startScanning);
+    document.getElementById("stop-scanner").addEventListener("click", stopScanning);
+    startScanning();
+});
