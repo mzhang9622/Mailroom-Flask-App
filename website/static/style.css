@@ -420,6 +420,19 @@ body.admin{
     font-weight: 600;
 }
 
+.login_button{
+    margin-top: 5%;
+    cursor: pointer;
+    width: 100%;
+    max-width:400px;
+    height: 4vw;
+    background: blue;
+    color: white;
+    font-size: 2vw;
+    font-weight: 600;
+    margin-bottom: 2vw;
+}
+
 .underline{
     text-decoration: underline;
     color: blue;
