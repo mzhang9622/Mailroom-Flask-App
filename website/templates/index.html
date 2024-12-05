@@ -129,7 +129,11 @@
                             Name: {{ box.name }}<br>
                             Quantity: <span class="box-quantity">{{ box.quantity }}</span><br>
                             Size: {{ box.size }}<br>
-                            Link: <a href="{{ box.link }}" class = "link-color">{{ box.link }}</a>
+                            Link: <a href="{{ box.link }}" class = "link-color">{{ box.link }}</a><br>
+                            {% if admin == True %}
+                            Low Stock Number: {{ box.low_stock }}<br>
+                            Barcode: {{ box.barcode }}
+                            {% endif %}
                         </div>
                     </div>
                 </div>
