@@ -55,6 +55,106 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    document.querySelectorAll('.update-size-form').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const boxId = this.dataset.boxId;
+            const size = this.querySelector('input[name="size"]').value;
+
+            fetch(`/update_size/${boxId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ size: size })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const boxSize = this.closest('.box-side-by-side-container').querySelector('.box-size');
+                    boxSize.textContent = data.new_size;
+                } else {
+                    alert(data.message);
+                }
+            });
+        });
+    });
+
+    document.querySelectorAll('.update-link-form').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const boxId = this.dataset.boxId;
+            const link = this.querySelector('input[name="link"]').value;
+
+            fetch(`/update_link/${boxId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ link: link })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const boxLink = this.closest('.box-side-by-side-container').querySelector('.box-link');
+                    boxLink.textContent = data.new_link;
+                } else {
+                    alert(data.message);
+                }
+            });
+        });
+    });
+
+    document.querySelectorAll('.update-low-stock-form').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const boxId = this.dataset.boxId;
+            const low_stock = this.querySelector('input[name="low-stock"]').value;
+
+            fetch(`/update_low_stock/${boxId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ low_stock: low_stock })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const boxLowStock = this.closest('.box-side-by-side-container').querySelector('.box-low-stock');
+                    boxLowStock.textContent = data.new_low_stock;
+                } else {
+                    alert(data.message);
+                }
+            });
+        });
+    });
+
+    document.querySelectorAll('.update-barcode-form').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const boxId = this.dataset.boxId;
+            const barcode = this.querySelector('input[name="barcode"]').value;
+
+            fetch(`/update_barcode/${boxId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ barcode: barcode })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const boxBarcode = this.closest('.box-side-by-side-container').querySelector('.box-barcode');
+                    boxBarcode.textContent = data.new_barcode;
+                } else {
+                    alert(data.message);
+                }
+            });
+        });
+    });
+
     document.querySelectorAll('.delete-form').forEach(form => {
         form.addEventListener('submit', function(e) {
             e.preventDefault();
