@@ -35,9 +35,6 @@ body{
     box-sizing: border-box;
 }
 
-body.admin{
-    display: flex;
-}
 
 
 .top-bar{
@@ -312,12 +309,15 @@ body.admin{
 
 /*Beginning of login methods*/
 
-#login-background, #settings-background {
+#login-background, #settings-background{
     width: 100%;
     min-height: 100%;
     background: linear-gradient(to right, rgb(124,221,254),rgb(22,28,89));
 }
 
+#settings-background{
+    padding-bottom: 120px; 
+}
 
 .login-block-container, .about-block-conainter {
     width: 100vw;
@@ -694,7 +694,7 @@ th {
     }
     
     .delete-border-container{
-        margin-top: -20px;
+        margin-top: -30px;
         margin-left: 6px;
     }
   }
