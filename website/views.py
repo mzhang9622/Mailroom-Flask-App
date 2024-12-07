@@ -133,12 +133,12 @@ def add_box():
         db.session.commit()
 
     return redirect(url_for('main.index'))
-
+    
 @main_blueprint.route('/update_box/<int:box_id>', methods=['POST'])
 @login_required
 def update_box(box_id):
     '''
-    Update Boxes
+    Update Count
     '''
     box = Box.query.get(box_id)
     if not box:
@@ -176,6 +176,89 @@ def update_box(box_id):
         return jsonify({'success': True, 'new_quantity': box.quantity})
     except ValueError:
         return jsonify({'success': False, 'message': 'Invalid quantity value'})
+
+@main_blueprint.route('/update_size/<int:box_id>', methods=['POST'])
+@login_required
+def update_size(box_id):
+    '''
+    Update Size
+    '''
+    box = Box.query.get(box_id)
+    if not box:
+        return jsonify({'success': False, 'message': 'Box not found'})
+
+    size = request.json.get('size', 0)
+
+    try:
+        box.size = size
+        db.session.commit()
+
+        return jsonify({'success': True, 'new_size': box.size})
+    except ValueError:
+        return jsonify({'success': False, 'message': 'Invalid size value'})
+    
+@main_blueprint.route('/update_link/<int:box_id>', methods=['POST'])
+@login_required
+def update_link(box_id):
+    '''
+    Update Link
+    '''
+    box = Box.query.get(box_id)
+    if not box:
+        return jsonify({'success': False, 'message': 'Box not found'})
+
+    link = request.json.get('link', 0)
+
+    try:
+        box.link = link
+        db.session.commit()
+
+        return jsonify({'success': True, 'new_link': box.link})
+    except ValueError:
+        return jsonify({'success': False, 'message': 'Invalid link value'})
+
+@main_blueprint.route('/update_low_stock/<int:box_id>', methods=['POST'])
+@login_required
+def update_low_stock(box_id):
+    '''
+    Update Low Stock Number
+    '''
+    box = Box.query.get(box_id)
+    if not box:
+        return jsonify({'success': False, 'message': 'Box not found'})
+
+    low_stock = request.json.get('low_stock', 0)
+    try:
+        low_stock = int(low_stock)
+        box.low_stock = low_stock
+        box.low_stock = max(box.low_stock, 0)
+        db.session.commit()
+
+        return jsonify({'success': True, 'new_low_stock': box.low_stock})
+    except ValueError:
+        return jsonify({'success': False, 'message': 'Invalid low stock value'})
+    
+@main_blueprint.route('/update_barcode/<int:box_id>', methods=['POST'])
+@login_required
+def update_barcode(box_id):
+    '''
+    Update Barcode
+    '''
+    box = Box.query.get(box_id)
+    if not box:
+        return jsonify({'success': False, 'message': 'Box not found'})
+
+    barcode = request.json.get('barcode', 0)
+    try:
+        if Box.query.filter_by(barcode = barcode).first():
+            return jsonify({'success': False, 'message': 'Barcode must be unique!'})
+        
+        box.barcode = barcode
+        db.session.commit()
+
+        return jsonify({'success': True, 'new_barcode': box.barcode})
+    except ValueError:
+        return jsonify({'success': False, 'message': 'Invalid barcode value'})
 
 @main_blueprint.route('/scan_box', methods=['GET', 'POST'])
 @login_required

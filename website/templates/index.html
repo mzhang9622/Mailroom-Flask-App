@@ -121,25 +121,42 @@
                             
                             {% if admin == True %}
                             <div class="box-update-container">
-                                <form class="update-form" data-box-id="{{ box.id }}">
-                                    <input type="number" placeholder="Enter # to + or -" id = "input-text" name="quantity" required >
-                                    <input type="submit" value="Submit" class = "submit_button">
-                                </form>
-    
-                                <form class="delete-form" data-box-id="{{ box.id }}">
-                                    <input type="submit" value="Delete Box" class = "submit_button">
-                                </form>
-                            </div>
+                                <div class="button-group">
+                                    <form class="update-form" data-box-id="{{ box.id }}">
+                                        <input type="number" placeholder="Enter # to + or -" id="input-text" name="quantity" required>
+                                        <input type="submit" value="Submit" class="submit_button">
+                                    </form>
+                                    <form class="update-size-form" data-box-id="{{ box.id }}">
+                                        <input type="text" placeholder="Edit Size" id="input-text" name="size" required>
+                                        <input type="submit" value="Submit" class="submit_button">
+                                    </form>
+                                    <form class="update-link-form" data-box-id="{{ box.id }}">
+                                        <input type="text" placeholder="Edit Link" id="input-text" name="link" required>
+                                        <input type="submit" value="Submit" class="submit_button">
+                                    </form>
+                                    <form class="update-low-stock-form" data-box-id="{{ box.id }}">
+                                        <input type="number" placeholder="Edit Low Stock #" id="input-text" name="low-stock" required>
+                                        <input type="submit" value="Submit" class="submit_button">
+                                    </form>
+                                    <form class="update-barcode-form" data-box-id="{{ box.id }}">
+                                        <input type="text" placeholder="Edit Barcode" id="input-text" name="barcode" required>
+                                        <input type="submit" value="Submit" class="submit_button">
+                                    </form>
+                                    <form class="delete-form" data-box-id="{{ box.id }}">
+                                        <input type="submit" value="Delete Box" class="submit_button">
+                                    </form>
+                                </div>
+                            </div>                            
                             {% endif %}
                         </div>
                         <div class="box-info-container">
                             Name: {{ box.name }}<br>
                             Quantity: <span class="box-quantity">{{ box.quantity }}</span><br>
-                            Size: {{ box.size }}<br>
-                            Link: <a href="{{ box.link }}" class = "link-color">{{ box.link }}</a><br>
+                            Size: <span class="box-size">{{ box.size }}</span><br>
+                            Link: <span class="box-link"><a href="{{ box.link }}" class = "link-color">{{ box.link }}</a></span><br>
                             {% if admin == True %}
-                            Low Stock Number: {{ box.low_stock }}<br>
-                            Barcode: {{ box.barcode }}
+                            Low Stock Number: <span class="box-low-stock">{{ box.low_stock }}</span><br>
+                            Barcode: <span class="box-barcode">{{ box.barcode }}</span>
                             {% endif %}
                         </div>
                     </div>
