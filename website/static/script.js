@@ -1,3 +1,5 @@
+
+
 /* FOR CONFIRMING DELETION of ADMIN */
 const deleteAdmin = document.querySelectorAll('.remove-form');
 deleteAdmin.forEach(form => {
@@ -196,36 +198,15 @@ function togglePassword() {
     });
 
 }
-togglePassword();
+//togglePassword();
 
 /* Barcode Scanner Integration */
-document.addEventListener("DOMContentLoaded", function () {
-    const reader = new Html5Qrcode("reader");
-    const resultElement = document.getElementById("scan-result");
-    const barcodeInput = document.getElementById("barcode-text");
-    function startScanning() {
-        reader.start(
-            { facingMode: "environment" },
-            {
-                fps: 10,
-                qrbox: { width: 250, height: 250 }
-            },
-            (decodedText) => {
-                console.log("Scanned code:", decodedText);
-                resultElement.innerHTML = `<b>Scanned Code:</b> ${decodedText}`;
-                if (barcodeInput) barcodeInput.value = decodedText;
-            },
-            (errorMessage) => {
-                console.log("Scan error:", errorMessage);
-            }
-        ).catch((err) => {
-            console.error("Failed to start barcode scanner:", err);
-        });
-    }
-    function stopScanning() {
-        reader.stop();
-    }
-    document.getElementById("start-scanner").addEventListener("click", startScanning);
-    document.getElementById("stop-scanner").addEventListener("click", stopScanning);
-    startScanning();
-});
+function onScanSuccess(decodedText, decodedResult) {
+    console.log(`Code scanned = ${decodedText}`, decodedResult);
+    const searchBar = document.getElementById("barcode-text");
+    searchBar.value = decodedText;
+}
+var html5QrcodeScanner = new Html5QrcodeScanner(
+ "qr-reader", { fps: 10, qrbox: 250 });
+html5QrcodeScanner.render(onScanSuccess);
+
