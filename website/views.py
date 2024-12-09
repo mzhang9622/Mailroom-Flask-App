@@ -167,7 +167,7 @@ def update_box(box_id):
             """
             send_email(
                 subject=f"Low Stock Alert: {box.name}",
-                to_email='mzhang9622@gmail.com',
+                to_email='jhsmit25@colby.edu',
                 html_content=email_content
             )
 
