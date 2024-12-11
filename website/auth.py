@@ -65,6 +65,7 @@ def login_g():
     '''
     authorization_url, state = flow.authorization_url()
     session["state"] = state
+    print('\n\nState on login_g:', session["state"])
     return redirect(authorization_url)
 
 
@@ -84,6 +85,7 @@ def callback():
     '''
     flow.fetch_token(authorization_response = request.url)
 
+    print('\n\nState in callback:', session)
     if not session["state"] == request.args["state"]:
         abort(500)
 
