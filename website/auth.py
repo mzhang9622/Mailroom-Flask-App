@@ -58,7 +58,7 @@ def login():
         flash('Invalid username or password', "error")
         return redirect(url_for('auth.login'))
 
-@auth_blueprint.route('/login_g')
+@auth_blueprint.route('/login_g', methods=['GET', 'POST'])
 def login_g():
     '''
     Google Login
@@ -77,11 +77,12 @@ def logout():
     logout_user()
     return redirect(url_for('main.index'))
 
-@auth_blueprint.route('/callback')
+@auth_blueprint.route('/callback', methods=['POST'])
 def callback():
     '''
     Google API
     '''
+    print("HELLO")
     flow.fetch_token(authorization_response = request.url)
 
     if not session["state"] == request.args["state"]:
