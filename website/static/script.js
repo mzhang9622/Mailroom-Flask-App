@@ -198,7 +198,7 @@ function togglePassword() {
     });
 
 }
-togglePassword();
+// togglePassword();
 
 /* Barcode Scanner Integration */
 function onScanSuccess(decodedText, decodedResult) {
