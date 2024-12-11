@@ -98,10 +98,6 @@
                     {% endif %}
                 </div>
 
-                {% for category, message in get_flashed_messages(with_categories=True) %}
-                <div class="alert alert-{{category}}">{{ message }}</div>
-                {% endfor %}
-
                 {% for box in boxes %}
                 <div class="box-loop">
                     <div class="box-title">
@@ -151,8 +147,14 @@
                             Link: <span class="box-link"><a href="{{ box.link }}" class = "link-color">{{ box.link }}</a></span><br>
                             {% if admin == True %}
                             Low Stock Number: <span class="box-low-stock">{{ box.low_stock }}</span><br>
-                            Barcode: <span class="box-barcode">{{ box.barcode }}</span>
-                            {% endif %}
+                            Barcode: <span class="box-barcode">{{ box.barcode }}</span><br>
+                            <div class="red">
+                                <span class="warning">
+                                {% if box.quantity <= box.low_stock %}
+                                WARNING! LOW STOCK!
+                                {% endif %}</span>
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
                 </div>

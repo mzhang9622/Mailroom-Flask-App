@@ -50,6 +50,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (data.success) {
                     const boxQuantity = this.closest('.box-side-by-side-container').querySelector('.box-quantity');
                     boxQuantity.textContent = data.new_quantity;
+                    const warning = this.closest('.box-side-by-side-container').querySelector('.warning');
+                    const low_stock = parseInt(this.closest('.box-side-by-side-container').querySelector('.box-low-stock').textContent);
+                    if (parseInt(boxQuantity.textContent) <= low_stock)
+                    {
+                        warning.textContent = "WARNING! LOW STOCK!";
+                    }
+                    else
+                    {
+                        warning.textContent = "";
+                    }
                 } else {
                     alert(data.message);
                 }
