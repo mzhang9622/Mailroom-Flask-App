@@ -9,25 +9,16 @@ import sys
 import sqlite3
 import os
 from werkzeug.security import generate_password_hash
-from website import create_app
-from website import db
-from website.models import Box
-from website.models import User
 
 sys.path.append(os.path.abspath(
     "/Users/jordansmith/Desktop/CS321/group-sprint-2/Mailroom-Flask-App/website"))
 
-# @pytest.fixture
-# def client():
-#     """
-#     Test client fixture for simulating requests.
-#     """
-#     website.config['TESTING'] = True
-#     website.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'  # In-memory DB for testing
-#     with website.test_client() as client:
-#         with website.app_context():
-#             db.create_all()  # Create tables for testing
-#         yield client
+from app import create_app
+from website import db
+from website.models import Box
+from website.models import User
+from unittest.mock import patch, MagicMock
+from flask import url_for
 
 
 def test_login_success(test_client):
@@ -205,46 +196,46 @@ def test_increase_box(test_client):
     WHEN: The '/update_box/<int>' page is requested (POST)
     THEN: Check the box amount is increased by the specified amount
     '''
-    app = create_app()
-    with app.app_context():
-        if not Box.query.filter_by(name = "test").all():
-            name = "test"
-            quantity = 5
-            size = "test"
-            link = "test"
-            image = "mule"
-            # image.save("static/images/" + image.filename)
-            low_stock = 0
-            barcode = "test"
-            box = Box(id=1, name = name, quantity = quantity, size = size, link = link,
-                    image = image, low_stock = low_stock, barcode = barcode)
-            db.session.add(box)
-            db.session.commit()
-            print("WORKING")
-
     test_client.post(
         '/login',
         data={'email': 'jhsmit25@colby.edu', 'password': 'jordan'},
         follow_redirects=True
     )
 
-    #Does not work because database has been temporarily wiped
+    if not Box.query.filter_by(name = "test").all():
+        response = test_client.post(
+            '/add_box',
+            data={
+                'name': 'test',
+                'quantity': '5',
+                'size': 'test',
+                'link': 'test',
+                'image': (io.BytesIO(b'test image data'), 'test.png'),
+                'low_stock': '0',
+                'barcode': 'test',
+            },
+            content_type='multipart/form-data',  # Required for file uploads
+            follow_redirects=True,
+        )
+
+    app = create_app()
     with app.app_context():
-        init_quan = Box.query.get(1).quantity
-    response = test_client.post('/update_box/1', data={'quantity': '5'}, follow_redirects=True)
+        init_quan = Box.query.filter_by(name = 'test').first().quantity
+        id = Box.query.filter_by(name = 'test').first().id
+    response = test_client.post('/update_box/' + str(id), json={'quantity': '5'}, follow_redirects=True)
     assert response.status_code == 200
     with app.app_context():
-        assert Box.query.get(1).quantity == init_quan+5
+        assert Box.query.filter_by(name = 'test').first().quantity == init_quan+5
 
 
     #Check that system can handle overflow
     with app.app_context():
-        init_quan = Box.query.get(1).quantity
-    response = test_client.post('/update_box/1',
-                                data={"quantity": str(sys.maxsize)}, follow_redirects=True)
+        init_quan = Box.query.get(id).quantity
+    response = test_client.post('/update_box/' + str(id),
+                                json={"quantity": str(sys.maxsize)}, follow_redirects=True)
     assert response.status_code == 200
     with app.app_context():
-        assert Box.query.get(1).quantity != init_quan+sys.maxsize
+        assert Box.query.get(id).quantity != init_quan+sys.maxsize
 
 
 def test_decrease_box_admin(test_client):
@@ -259,24 +250,24 @@ def test_decrease_box_admin(test_client):
         follow_redirects=True
     )
 
-    #Does not work because database has been temporarily wiped
     app = create_app()
     with app.app_context():
-        init_quan = Box.query.get(1).quantity
-    response = test_client.post('/update_box/1', data={"quantity": "-5"}, follow_redirects=True)
+        init_quan = Box.query.filter_by(name = 'test').first().quantity
+        id = Box.query.filter_by(name = 'test').first().id
+    response = test_client.post('/update_box/' + str(id), json={"quantity": "-5"}, follow_redirects=True)
     assert response.status_code == 200
     with app.app_context():
-        assert Box.query.get(1).quantity == init_quan-5
+        assert Box.query.get(id).quantity == init_quan-5
 
 
     #Check that system can handle overflow
     with app.app_context():
-        init_quan = Box.query.get(1).quantity
-    response = test_client.post('/update_box/1',
-                                data={"quantity": str(-sys.maxsize)}, follow_redirects=True)
+        init_quan = Box.query.filter_by(name = 'test').first().quantity
+    response = test_client.post('/update_box/' + str(id),
+                                json={"quantity": str(-sys.maxsize)}, follow_redirects=True)
     assert response.status_code == 200
     with app.app_context():
-        assert Box.query.get(1).quantity != init_quan-sys.maxsize
+        assert Box.query.get(id).quantity != init_quan-sys.maxsize
 
 def test_delete_box(test_client):
     '''
@@ -292,16 +283,16 @@ def test_delete_box(test_client):
 
     app = create_app()
     with app.app_context():
-        if not Box.query.filter_by(name = "test2").all():
-            name = "test2"
+        if not Box.query.filter_by(name = "delete_test").all():
+            name = "delete_test"
             quantity = 5
             size = "test"
             link = "test"
             image = "mule"
             # image.save("static/images/" + image.filename)
             low_stock = 0
-            barcode = "test2"
-            box = Box(name = name, quantity = quantity, size = size, link = link,
+            barcode = "delete_test"
+            box = Box(id = 1, name = name, quantity = quantity, size = size, link = link,
                     image = image, low_stock = low_stock, barcode = barcode)
             db.session.add(box)
             db.session.commit()
@@ -396,16 +387,16 @@ def test_add_box(test_client):
                 data={
                 'name': 'Test: ' + ''.join(random.choice(string.ascii_lowercase)
                                            for _ in range(12)),
-                'quantity': 'test',
+                'quantity': 10,
                 'size': 'test',
                 'link':  'test',
-                'image':  fake_file,
                 'low_stock':  5,
                 'barcode': 'P' + ''.join(random.choice(string.ascii_lowercase)
-                                         for _ in range(12))
+                                         for _ in range(12)),
+                'image': fake_file
                 },
             content_type='multipart/form-data',
-            follow_redirects=True
+            follow_redirects=True,
         )
 
     print(response.data)
@@ -494,3 +485,447 @@ def test_admin_failure(test_client):
     assert response.status_code == 200
     assert b"login" in response.data
     assert b"Admin" not in response.data
+
+
+
+# New Tests
+def test_google_login(test_client):
+    '''
+    GIVEN: A Flask app configured for testing with a test test_client
+    WHEN: The '/login_g' page is requested (POST)
+    THEN: Check the user is redirected to google login
+    '''
+    #Should not work because not logged in
+    response = test_client.get('/login_g', follow_redirects=False)
+
+    #Should be taken to non-admin home page
+    assert response.status_code == 302
+
+
+def test_callback(google_client):
+
+    # Test the login-g route
+    response = google_client.post('/login_g')
+
+    # Check the response is a redirect
+    assert response.status_code == 302
+
+    # Check the redirect location is correct
+    print(response.headers['Location'])
+    assert response.headers['Location'] == "http://example.com/auth"
+
+    # Check the state is stored in the session
+    with google_client.session_transaction() as session:
+        assert session['state'] == "mock_state"
+
+def test_login_get(test_client):
+    # Simulate a POST request to /login with valid credentials    
+    response = test_client.get('/login')
+
+    assert response.status_code == 200
+    print(response.data)
+    assert b"login-input-container" in response.data
+
+# def test_login_get_while_logged_in(test_client, valid_test_user):
+#     # Simulate a POST request to /login with valid credentials
+#     user = User() 
+#     response = test_client.post(
+#             '/login',
+#             data={'email': 'jhsmit25@colby.edu', 'password': 'jordan'},
+#             follow_redirects=True
+#         )
+
+#     assert response.status_code == 200
+#     print(response.data)
+#     assert b"login-input-container" in response.data
+
+def test_repeat_box_name(test_client):
+
+    test_client.post(
+            '/login',
+            data={'email': 'jhsmit25@colby.edu', 'password': 'jordan'},
+            follow_redirects=True
+        )
+
+    response = test_client.post(
+            '/add_box',
+            data={
+                'name': 'test',
+                'quantity': '5',
+                'size': 'test',
+                'link': 'test',
+                'image': (io.BytesIO(b'test image data'), 'test.png'),
+                'low_stock': '0',
+                'barcode': 'test',
+            },
+            content_type='multipart/form-data',  # Required for file uploads
+            follow_redirects=True,
+        )
+
+    assert response.status_code == 200
+    assert b"ERROR: Box name already exists in database!" in response.data
+
+def test_repeat_box_barcode(test_client):
+
+    test_client.post(
+            '/login',
+            data={'email': 'jhsmit25@colby.edu', 'password': 'jordan'},
+            follow_redirects=True
+        )
+
+    response = test_client.post(
+            '/add_box',
+            data={
+                'name': 'new_test',
+                'quantity': '5',
+                'size': 'test',
+                'link': 'test',
+                'image': (io.BytesIO(b'test image data'), 'test.png'),
+                'low_stock': '0',
+                'barcode': 'test',
+            },
+            content_type='multipart/form-data',  # Required for file uploads
+            follow_redirects=True,
+        )
+
+    assert response.status_code == 200
+    assert b"ERROR: Barcode already exists in database!" in response.data
+
+def test_negative_box_count(test_client):
+
+    test_client.post(
+            '/login',
+            data={'email': 'jhsmit25@colby.edu', 'password': 'jordan'},
+            follow_redirects=True
+        )
+
+    response = test_client.post(
+            '/add_box',
+            data={
+                'name': 'unique_name',
+                'quantity': '-5',
+                'size': 'test',
+                'link': 'test',
+                'image': (io.BytesIO(b'test image data'), 'test.png'),
+                'low_stock': '0',
+                'barcode': 'unique_barcode',
+            },
+            content_type='multipart/form-data',  # Required for file uploads
+            follow_redirects=True,
+        )
+
+    assert response.status_code == 200
+    assert b"ERROR: Box count cannot be negative!" in response.data
+
+def test_negative_low_stock(test_client):
+
+    test_client.post(
+            '/login',
+            data={'email': 'jhsmit25@colby.edu', 'password': 'jordan'},
+            follow_redirects=True
+        )
+
+    response = test_client.post(
+            '/add_box',
+            data={
+                'name': 'unique_name',
+                'quantity': '5',
+                'size': 'test',
+                'link': 'test',
+                'image': (io.BytesIO(b'test image data'), 'test.png'),
+                'low_stock': '-5',
+                'barcode': 'unique_barcode',
+            },
+            content_type='multipart/form-data',  # Required for file uploads
+            follow_redirects=True,
+        )
+
+    assert response.status_code == 200
+    assert b"ERROR: Low stock number cannot be negative!" in response.data
+
+
+def test_update_non_existent_box(test_client):
+    '''
+    GIVEN: A Flask app configured for testing with a test test_client
+    WHEN: The '/update_box/<int>' page is requested (POST)
+    THEN: Check the box amount is increased by the specified amount
+    '''
+    test_client.post(
+        '/login',
+        data={'email': 'jhsmit25@colby.edu', 'password': 'jordan'},
+        follow_redirects=True
+    )
+
+    #attempting to add to non-existent box
+    response = test_client.post('/update_box/19387', json={'quantity': '5'}, follow_redirects=True)
+    assert response.status_code == 200
+    assert b"Box not found" in response.data
+
+    #attempting to subtract from non-existent box
+    response = test_client.post('/update_box/19387', json={'quantity': '-5'}, follow_redirects=True)
+    assert response.status_code == 200
+    assert b"Box not found" in response.data
+
+    #attempting to add 0 to non-existent box
+    response = test_client.post('/update_box/19387', json={'quantity': '0'}, follow_redirects=True)
+    assert response.status_code == 200
+    assert b"Box not found" in response.data
+
+
+def test_update_box_invalid_quantity(test_client):
+    '''
+    GIVEN: A Flask app configured for testing with a test test_client
+    WHEN: The '/update_box/<int>' page is requested (POST)
+    THEN: Check the box amount is increased by the specified amount
+    '''
+    test_client.post(
+        '/login',
+        data={'email': 'jhsmit25@colby.edu', 'password': 'jordan'},
+        follow_redirects=True
+    )
+
+    #attempting to update with invalid quantity
+    response = test_client.post('/update_box/2', json={'quantity': 'Hello'}, follow_redirects=True)
+    assert response.status_code == 200
+    assert b"Invalid quantity value" in response.data
+
+def test_update_size_success(test_client):
+    test_client.post(
+        '/login',
+        data={'email': 'jhsmit25@colby.edu', 'password': 'jordan'},
+        follow_redirects=True
+    )
+
+    #attempting to update with invalid quantity
+    response = test_client.post('/update_size/2', json={'size': '10 x 10 x 10'}, follow_redirects=True)
+    assert response.status_code == 200
+    assert Box.query.get(2).size == '10 x 10 x 10'
+
+def test_update_nonexistent_size(test_client):
+    test_client.post(
+        '/login',
+        data={'email': 'jhsmit25@colby.edu', 'password': 'jordan'},
+        follow_redirects=True
+    )
+
+    #attempting to update with non-existent box
+    response = test_client.post('/update_size/10938', json={'size': '10 x 10 x 10'}, follow_redirects=True)
+    assert response.status_code == 200
+    assert b"Box not found" in response.data
+
+def test_update_link_success(test_client):
+    test_client.post(
+        '/login',
+        data={'email': 'jhsmit25@colby.edu', 'password': 'jordan'},
+        follow_redirects=True
+    )
+
+    #attempting to update with invalid quantity
+    response = test_client.post('/update_link/2', json={'link': 'https://example.com'}, follow_redirects=True)
+    assert response.status_code == 200
+    assert Box.query.get(2).link == 'https://example.com'
+
+def test_update_nonexistent_link(test_client):
+    test_client.post(
+        '/login',
+        data={'email': 'jhsmit25@colby.edu', 'password': 'jordan'},
+        follow_redirects=True
+    )
+
+    #attempting to update with non-existent box
+    response = test_client.post('/update_link/10938', json={'link': 'https://example.com'}, follow_redirects=True)
+    assert response.status_code == 200
+    assert b"Box not found" in response.data
+
+def test_update_low_stock_success(test_client):
+    test_client.post(
+        '/login',
+        data={'email': 'jhsmit25@colby.edu', 'password': 'jordan'},
+        follow_redirects=True
+    )
+
+    #attempting to update with invalid quantity
+    response = test_client.post('/update_low_stock/2', json={'low_stock': '0'}, follow_redirects=True)
+    assert response.status_code == 200
+    assert Box.query.get(2).low_stock == 0
+
+
+def test_update_nonexistent_low_stock(test_client):
+    test_client.post(
+        '/login',
+        data={'email': 'jhsmit25@colby.edu', 'password': 'jordan'},
+        follow_redirects=True
+    )
+
+    #attempting to update with non-existent box
+    response = test_client.post('/update_low_stock/10938', json={'low_stock': '0'}, follow_redirects=True)
+    assert response.status_code == 200
+    assert b"Box not found" in response.data
+
+def test_update_low_stock_success_2(test_client):
+    test_client.post(
+        '/login',
+        data={'email': 'jhsmit25@colby.edu', 'password': 'jordan'},
+        follow_redirects=True
+    )
+
+    #attempting to update with invalid quantity
+    response = test_client.post('/update_low_stock/2', json={'low_stock': 'hello'}, follow_redirects=True)
+    assert response.status_code == 200
+    assert b"Invalid low stock value" in response.data
+
+def test_update_barcode_success(test_client):
+    test_client.post(
+        '/login',
+        data={'email': 'jhsmit25@colby.edu', 'password': 'jordan'},
+        follow_redirects=True
+    )
+
+    #attempting to update with invalid quantity
+    new_barcode = ''.join(random.choice(string.ascii_lowercase) for _ in range(12))
+    response = test_client.post('/update_barcode/2', json={'barcode': new_barcode}, follow_redirects = True)
+    assert response.status_code == 200
+    assert Box.query.get(2).barcode == new_barcode
+
+def test_update_repeat_barcode(test_client):
+    test_client.post(
+        '/login',
+        data={'email': 'jhsmit25@colby.edu', 'password': 'jordan'},
+        follow_redirects=True
+    )
+
+    #attempting to update with repeat barcode
+    response = test_client.post('/update_barcode/2', json={'barcode': 'test'}, follow_redirects = True)
+    assert response.status_code == 200
+    assert b"Barcode must be unique" in response.data
+
+def test_update_nonexistent_barcode(test_client):
+    test_client.post(
+        '/login',
+        data={'email': 'jhsmit25@colby.edu', 'password': 'jordan'},
+        follow_redirects=True
+    )
+
+    #attempting to update with non-existent box
+    new_barcode = ''.join(random.choice(string.ascii_lowercase) for _ in range(12))
+    response = test_client.post('/update_barcode/10938', json={'barcode': new_barcode}, follow_redirects = True)
+    assert response.status_code == 200
+    assert b"Box not found" in response.data
+
+
+def test_scan_box(test_client):
+    test_client.post(
+        '/login',
+        data={'email': 'jhsmit25@colby.edu', 'password': 'jordan'},
+        follow_redirects=True
+    )
+
+    app = create_app()
+    with app.app_context():
+        id = Box.query.filter_by(name = 'test').first().id
+    test_client.post('/update_box/' + str(id), json={'quantity': '5'}, follow_redirects=True)
+    init_quan = Box.query.filter_by(name = 'test').first().quantity
+
+
+    response = test_client.post('/scan_box', data={'barcode': "test"}, follow_redirects = True)
+    assert response.status_code == 200
+    with app.app_context():
+        assert Box.query.filter_by(name = 'test').first().quantity == init_quan-1
+
+def test_nonexistent_scan_box(test_client):
+    test_client.post(
+        '/login',
+        data={'email': 'jhsmit25@colby.edu', 'password': 'jordan'},
+        follow_redirects=True
+    )
+
+
+    response = test_client.post('/scan_box', data={'barcode': "nonexistent"}, follow_redirects = True)
+    assert response.status_code == 200
+    assert b"ERROR: Barcode does not exist in database!" in response.data
+
+def test_nonexistent_delete_box(test_client):
+    test_client.post(
+        '/login',
+        data={'email': 'jhsmit25@colby.edu', 'password': 'jordan'},
+        follow_redirects=True
+    )
+
+
+    response = test_client.post('/delete_box/982729', follow_redirects = True)
+    assert response.status_code == 200
+    assert b"Box not found" in response.data
+
+
+from unittest.mock import patch, MagicMock
+
+# def test_callback(test_client):
+#     # Mock credentials
+#     mock_credentials = MagicMock()
+#     mock_credentials._id_token = "test_id_token"
+#     mock_credentials.token = "mock_access_token"  # Ensure token is present
+
+#     # Patch fetch_token, credentials, and id_token verification
+#     with patch("website.auth.flow.fetch_token") as mock_fetch_token, \
+#          patch("website.auth.flow.credentials", mock_credentials), \
+#          patch("google.oauth2.id_token.verify_oauth2_token") as mock_verify:
+        
+#         # Simulate fetch_token call (mocked to return None, but token is set in credentials)
+#         mock_fetch_token.return_value = None  # You could mock actual fetch logic if needed
+
+#         # Simulate id_token verification
+#         mock_verify.return_value = {
+#             "sub": "123456789",
+#             "name": "Test User",
+#             "email": "test@example.com"
+#         }
+
+#         # Set session state
+#         with test_client.session_transaction() as session:
+#             session["state"] = "test_state"
+
+#         # Simulate callback
+#         response = test_client.post("/callback?state=test_state&code=valid_code")
+
+#         # Debug outputs
+#         print("Response status code:", response.status_code)
+#         print("Response headers:", response.headers)
+
+#         # Assertions
+#         assert response.status_code == 302  # Redirection expected
+#         assert "/index" in response.headers["Location"]  # Check redirect URL
+
+#         # Follow redirect to validate final page content
+#         response = test_client.get(response.headers["Location"], follow_redirects=True)
+#         print("Final response data:", response.data.decode("utf-8"))
+#         assert b"Scan Box" in response.data
+
+def test_add_repeat_user(test_client):
+    test_client.post(
+        '/login',
+        data={'email': 'jhsmit25@colby.edu', 'password': 'jordan'},
+        follow_redirects=True
+    )
+
+    
+    response = test_client.post('/add_user',
+                                data = {'email': "jhsmit25@colby.edu",
+                                        'password': "random"},
+                                follow_redirects = True)
+    assert response.status_code == 200
+    assert b"ERROR: There is already an admin with that email!" in response.data
+
+def test_add_invalid_user(test_client):
+    test_client.post(
+        '/login',
+        data={'email': 'jhsmit25@colby.edu', 'password': 'jordan'},
+        follow_redirects=True
+    )
+
+    
+    response = test_client.post('/add_user',
+                                data = {'email': "jhsmit25@bowdoin.edu",
+                                        'password': "1234"},
+                                follow_redirects = True)
+    assert response.status_code == 200
+    assert b"ERROR: Invalid email address! Please use a @colby.edu email." in response.data

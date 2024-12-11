@@ -73,7 +73,7 @@ def contact():
 
     return render_template('contact.html', admin = False, access_key=access_key)
 
-@main_blueprint.route("/login")
+@main_blueprint.route("/login", methods=['GET'])
 def login():
     '''
     Login Page
@@ -189,13 +189,10 @@ def update_size(box_id):
 
     size = request.json.get('size', 0)
 
-    try:
-        box.size = size
-        db.session.commit()
+    box.size = size
+    db.session.commit()
 
-        return jsonify({'success': True, 'new_size': box.size})
-    except ValueError:
-        return jsonify({'success': False, 'message': 'Invalid size value'})
+    return jsonify({'success': True, 'new_size': box.size})
     
 @main_blueprint.route('/update_link/<int:box_id>', methods=['POST'])
 @login_required
@@ -209,13 +206,10 @@ def update_link(box_id):
 
     link = request.json.get('link', 0)
 
-    try:
-        box.link = link
-        db.session.commit()
+    box.link = link
+    db.session.commit()
 
-        return jsonify({'success': True, 'new_link': box.link})
-    except ValueError:
-        return jsonify({'success': False, 'message': 'Invalid link value'})
+    return jsonify({'success': True, 'new_link': box.link})
 
 @main_blueprint.route('/update_low_stock/<int:box_id>', methods=['POST'])
 @login_required
@@ -249,16 +243,13 @@ def update_barcode(box_id):
         return jsonify({'success': False, 'message': 'Box not found'})
 
     barcode = request.json.get('barcode', 0)
-    try:
-        if Box.query.filter_by(barcode = barcode).first():
-            return jsonify({'success': False, 'message': 'Barcode must be unique!'})
-        
-        box.barcode = barcode
-        db.session.commit()
+    if Box.query.filter_by(barcode = barcode).first():
+        return jsonify({'success': False, 'message': 'Barcode must be unique!'})
+    
+    box.barcode = barcode
+    db.session.commit()
 
-        return jsonify({'success': True, 'new_barcode': box.barcode})
-    except ValueError:
-        return jsonify({'success': False, 'message': 'Invalid barcode value'})
+    return jsonify({'success': True, 'new_barcode': box.barcode})
 
 @main_blueprint.route('/scan_box', methods=['GET', 'POST'])
 @login_required
