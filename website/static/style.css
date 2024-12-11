@@ -698,3 +698,7 @@ th {
         margin-left: 6px;
     }
   }
+
+  .red {
+    color: red;
+  }
