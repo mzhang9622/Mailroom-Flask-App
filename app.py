@@ -2,9 +2,9 @@
 app.py
 '''
 
-from website import create_app
 import os
 from dotenv import load_dotenv
+from website import create_app
 
 load_dotenv()
 app = create_app()

@@ -3,6 +3,10 @@ website_test.py
 '''
 
 import io
+from website import db
+from app import create_app
+from website.models import Box
+from website.models import User
 import random
 import string
 import sys
@@ -13,12 +17,8 @@ from werkzeug.security import generate_password_hash
 sys.path.append(os.path.abspath(
     "/Users/jordansmith/Desktop/CS321/group-sprint-2/Mailroom-Flask-App/website"))
 
-from app import create_app
-from website import db
-from website.models import Box
-from website.models import User
-from unittest.mock import patch, MagicMock
-from flask import url_for
+#from unittest.mock import patch, MagicMock
+#from flask import url_for
 
 
 def test_login_success(test_client):
@@ -298,8 +298,8 @@ def test_delete_box(test_client):
             db.session.commit()
 
     #Does not work because database has been temporarily wiped
-    with app.app_context():
-        init_name = Box.query.get(1).name
+    # with app.app_context():
+    #     init_name = Box.query.get(1).name
     response = test_client.post('/delete_box/1', follow_redirects=True)
     assert response.status_code == 200
     with app.app_context():
@@ -357,8 +357,6 @@ def test_delete_yourself_failure(test_client):
     #Verify Admin not deleted
     with app.app_context():
         assert User.query.get(init_user.id) == init_user
-
-
 
 
 def test_add_box(test_client):
@@ -428,7 +426,6 @@ def test_add_user_success(test_client):
     cursor = conn.cursor()
     cursor.execute("SELECT MAX(id) FROM user")
     init_max = cursor.fetchone()[0]
-
 
 
     response = test_client.post('/add_user',
@@ -503,6 +500,9 @@ def test_google_login(test_client):
 
 
 def test_callback(google_client):
+    '''
+        Test callback
+    '''
 
     # Test the login-g route
     response = google_client.post('/login_g')
@@ -519,6 +519,9 @@ def test_callback(google_client):
         assert session['state'] == "mock_state"
 
 def test_login_get(test_client):
+    '''
+        Test login
+    '''
     # Simulate a POST request to /login with valid credentials    
     response = test_client.get('/login')
 
@@ -540,7 +543,9 @@ def test_login_get(test_client):
 #     assert b"login-input-container" in response.data
 
 def test_repeat_box_name(test_client):
-
+    '''
+        Test repeat box names
+    '''
     test_client.post(
             '/login',
             data={'email': 'jhsmit25@colby.edu', 'password': 'jordan'},
@@ -592,7 +597,9 @@ def test_repeat_box_barcode(test_client):
     assert b"ERROR: Barcode already exists in database!" in response.data
 
 def test_negative_box_count(test_client):
-
+    '''
+        Test negative box count
+    '''
     test_client.post(
             '/login',
             data={'email': 'jhsmit25@colby.edu', 'password': 'jordan'},
@@ -618,7 +625,9 @@ def test_negative_box_count(test_client):
     assert b"ERROR: Box count cannot be negative!" in response.data
 
 def test_negative_low_stock(test_client):
-
+    '''
+        Test negative low stock
+    '''
     test_client.post(
             '/login',
             data={'email': 'jhsmit25@colby.edu', 'password': 'jordan'},
@@ -690,6 +699,9 @@ def test_update_box_invalid_quantity(test_client):
     assert b"Invalid quantity value" in response.data
 
 def test_update_size_success(test_client):
+    '''
+        Test update size
+    '''
     test_client.post(
         '/login',
         data={'email': 'jhsmit25@colby.edu', 'password': 'jordan'},
@@ -702,6 +714,9 @@ def test_update_size_success(test_client):
     assert Box.query.get(2).size == '10 x 10 x 10'
 
 def test_update_nonexistent_size(test_client):
+    '''
+        Test size
+    '''
     test_client.post(
         '/login',
         data={'email': 'jhsmit25@colby.edu', 'password': 'jordan'},
@@ -714,6 +729,9 @@ def test_update_nonexistent_size(test_client):
     assert b"Box not found" in response.data
 
 def test_update_link_success(test_client):
+    '''
+        Test links
+    '''
     test_client.post(
         '/login',
         data={'email': 'jhsmit25@colby.edu', 'password': 'jordan'},
@@ -726,6 +744,9 @@ def test_update_link_success(test_client):
     assert Box.query.get(2).link == 'https://example.com'
 
 def test_update_nonexistent_link(test_client):
+    '''
+        Test nonexistent links
+    '''
     test_client.post(
         '/login',
         data={'email': 'jhsmit25@colby.edu', 'password': 'jordan'},
@@ -738,6 +759,9 @@ def test_update_nonexistent_link(test_client):
     assert b"Box not found" in response.data
 
 def test_update_low_stock_success(test_client):
+    '''
+        Test low stock update
+    '''
     test_client.post(
         '/login',
         data={'email': 'jhsmit25@colby.edu', 'password': 'jordan'},
@@ -751,6 +775,9 @@ def test_update_low_stock_success(test_client):
 
 
 def test_update_nonexistent_low_stock(test_client):
+    '''
+        Test invalid low stock
+    '''
     test_client.post(
         '/login',
         data={'email': 'jhsmit25@colby.edu', 'password': 'jordan'},
@@ -763,6 +790,9 @@ def test_update_nonexistent_low_stock(test_client):
     assert b"Box not found" in response.data
 
 def test_update_low_stock_success_2(test_client):
+    '''
+        Test low stock
+    '''
     test_client.post(
         '/login',
         data={'email': 'jhsmit25@colby.edu', 'password': 'jordan'},
@@ -775,6 +805,9 @@ def test_update_low_stock_success_2(test_client):
     assert b"Invalid low stock value" in response.data
 
 def test_update_barcode_success(test_client):
+    '''
+        Test barcode working
+    '''
     test_client.post(
         '/login',
         data={'email': 'jhsmit25@colby.edu', 'password': 'jordan'},
@@ -800,6 +833,9 @@ def test_update_repeat_barcode(test_client):
     assert b"Barcode must be unique" in response.data
 
 def test_update_nonexistent_barcode(test_client):
+    '''
+        Test invalid barcode
+    '''
     test_client.post(
         '/login',
         data={'email': 'jhsmit25@colby.edu', 'password': 'jordan'},
@@ -814,6 +850,9 @@ def test_update_nonexistent_barcode(test_client):
 
 
 def test_scan_box(test_client):
+    '''
+        Test scan
+    '''
     test_client.post(
         '/login',
         data={'email': 'jhsmit25@colby.edu', 'password': 'jordan'},
@@ -833,6 +872,9 @@ def test_scan_box(test_client):
         assert Box.query.filter_by(name = 'test').first().quantity == init_quan-1
 
 def test_nonexistent_scan_box(test_client):
+    '''
+        Test scan for invalid box
+    '''
     test_client.post(
         '/login',
         data={'email': 'jhsmit25@colby.edu', 'password': 'jordan'},
@@ -845,6 +887,9 @@ def test_nonexistent_scan_box(test_client):
     assert b"ERROR: Barcode does not exist in database!" in response.data
 
 def test_nonexistent_delete_box(test_client):
+    '''
+        Test invalid delete box
+    '''
     test_client.post(
         '/login',
         data={'email': 'jhsmit25@colby.edu', 'password': 'jordan'},
@@ -857,7 +902,7 @@ def test_nonexistent_delete_box(test_client):
     assert b"Box not found" in response.data
 
 
-from unittest.mock import patch, MagicMock
+#from unittest.mock import patch, MagicMock
 
 # def test_callback(test_client):
 #     # Mock credentials
@@ -901,6 +946,9 @@ from unittest.mock import patch, MagicMock
 #         assert b"Scan Box" in response.data
 
 def test_add_repeat_user(test_client):
+    '''
+        Test duplicate users
+    '''
     test_client.post(
         '/login',
         data={'email': 'jhsmit25@colby.edu', 'password': 'jordan'},
@@ -916,6 +964,9 @@ def test_add_repeat_user(test_client):
     assert b"ERROR: There is already an admin with that email!" in response.data
 
 def test_add_invalid_user(test_client):
+    '''
+        Test invalid users
+    '''
     test_client.post(
         '/login',
         data={'email': 'jhsmit25@colby.edu', 'password': 'jordan'},
