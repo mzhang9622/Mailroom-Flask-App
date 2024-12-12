@@ -16,6 +16,22 @@ function confirmDelete(event) {
     }
 }
 
+/* FOR CONFIRMING DELETION of ADMIN */
+const deleteBox = document.querySelectorAll('.delete-form');
+deleteBox.forEach(form => {
+    form.addEventListener('submit', confirmDeleteBox);
+});
+
+function confirmDeleteBox(event) {
+    event.preventDefault();
+
+    const isConfirmed = confirm("Do you want to delete this box?");
+
+    if (isConfirmed) {
+        event.target.submit(); 
+    }
+}
+
 /* FOR REFRESH */
 window.onbeforeunload = function() {
     sessionStorage.setItem('scroll_pos', window.scrollY);
