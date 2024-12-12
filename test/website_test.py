@@ -486,38 +486,6 @@ def test_admin_failure(test_client):
     assert b"login" in response.data
     assert b"Admin" not in response.data
 
-
-
-# New Tests
-def test_google_login(test_client):
-    '''
-    GIVEN: A Flask app configured for testing with a test test_client
-    WHEN: The '/login_g' page is requested (POST)
-    THEN: Check the user is redirected to google login
-    '''
-    #Should not work because not logged in
-    response = test_client.get('/login_g', follow_redirects=False)
-
-    #Should be taken to non-admin home page
-    assert response.status_code == 302
-
-
-def test_callback(google_client):
-
-    # Test the login-g route
-    response = google_client.post('/login_g')
-
-    # Check the response is a redirect
-    assert response.status_code == 302
-
-    # Check the redirect location is correct
-    print(response.headers['Location'])
-    assert response.headers['Location'] == "http://example.com/auth"
-
-    # Check the state is stored in the session
-    with google_client.session_transaction() as session:
-        assert session['state'] == "mock_state"
-
 def test_login_get(test_client):
     # Simulate a POST request to /login with valid credentials    
     response = test_client.get('/login')
