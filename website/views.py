@@ -26,22 +26,10 @@ def index():
     Main page
     '''
     #this is very temporary
-    if not User.query.filter_by(email = "cyu25@colby.edu").all():
-        claire = User(email = "cyu25@colby.edu",
-                      password_hash = generate_password_hash("claire"))
-        db.session.add(claire)
-    if not User.query.filter_by(email = "jhsmit25@colby.edu").all():
-        jordan = User(email = "jhsmit25@colby.edu",
-                      password_hash = generate_password_hash("jordan"))
-        db.session.add(jordan)
-    if not User.query.filter_by(email = "mzhang25@colby.edu").all():
-        ming = User(email = "mzhang25@colby.edu",
-                    password_hash = generate_password_hash("ming"))
-        db.session.add(ming)
-    if not User.query.filter_by(email = "tjprat25@colby.edu").all():
-        tim = User(email = "tjprat25@colby.edu",
-                   password_hash = generate_password_hash("tim"))
-        db.session.add(tim)
+    if not User.query.filter_by(email = "darmstro@colby.edu").all():
+        deanna = User(email = "darmstro@colby.edu",
+                      password_hash = generate_password_hash(os.environ.get('MAILROOM_PASSWORD')))
+        db.session.add(deanna)
 
     db.session.commit()
 
@@ -166,7 +154,7 @@ def update_box(box_id):
             """
             send_email(
                 subject=f"Low Stock Alert: {box.name}",
-                to_email='jhsmit25@colby.edu',
+                to_email='darmstro@colby.edu',
                 html_content=email_content
             )
 
@@ -279,7 +267,7 @@ def scan_box():
             """
             send_email(
                 subject=f"Low Stock Alert: {box.name}",
-                to_email='mzhang9622@gmail.com',
+                to_email='darmstro@colby.edu',
                 html_content=email_content
             )
 
