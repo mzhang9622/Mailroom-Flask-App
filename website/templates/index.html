@@ -76,6 +76,10 @@
                 </div>
                 {% endif %}
 
+                {% for category, message in get_flashed_messages(with_categories=True) %}
+                <div class="alert alert-{{category}}">{{ message }}</div>
+                {% endfor %}
+
                 <div class = parent-background>
                     {% if admin == True %}
                     <div class = box-border-container>
