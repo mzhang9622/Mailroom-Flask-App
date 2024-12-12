@@ -259,7 +259,6 @@ def scan_box():
         if not Box.query.filter_by(barcode = barcode).first():
             flash('ERROR: Barcode does not exist in database!', 'error')
             return redirect(url_for('main.index'))
-        
         box = Box.query.filter_by(barcode = barcode).first()
         box.quantity -= 1
         box.quantity = max(box.quantity, 0)

@@ -3,12 +3,12 @@ website_test.py
 '''
 
 import io
-from werkzeug.security import generate_password_hash
 import sys
 import sqlite3
 import os
 import random
 import string
+from werkzeug.security import generate_password_hash
 from website import db
 from app import create_app
 from website.models import Box
@@ -35,7 +35,7 @@ def test_login_success(test_client):
             db.session.add(user)
             db.session.commit()
 
-    # Simulate a POST request to /login with valid credentials    
+    # Simulate a POST request to /login with valid credentials
     response = test_client.post(
         '/login',
         data={'email': 'jhsmit25@colby.edu', 'password': 'jordan'},
@@ -483,6 +483,14 @@ def test_admin_failure(test_client):
     assert b"login" in response.data
     assert b"Admin" not in response.data
 
+def test_login_get(test_client):
+    # Simulate a POST request to /login with valid credentials    
+    response = test_client.get('/login')
+
+    assert response.status_code == 200
+    print(response.data)
+    assert b"login-input-container" in response.data
+
 # def test_login_get_while_logged_in(test_client, valid_test_user):
 #     # Simulate a POST request to /login with valid credentials
 #     user = User() 
@@ -525,7 +533,9 @@ def test_repeat_box_name(test_client):
     assert b"ERROR: Box name already exists in database!" in response.data
 
 def test_repeat_box_barcode(test_client):
-
+    '''
+    Test duplicate barcode
+    '''
     test_client.post(
             '/login',
             data={'email': 'jhsmit25@colby.edu', 'password': 'jordan'},
@@ -775,6 +785,9 @@ def test_update_barcode_success(test_client):
     assert Box.query.get(2).barcode == new_barcode
 
 def test_update_repeat_barcode(test_client):
+    '''
+    Test update with repeat barcode
+    '''
     test_client.post(
         '/login',
         data={'email': 'jhsmit25@colby.edu', 'password': 'jordan'},
@@ -849,8 +862,6 @@ def test_nonexistent_delete_box(test_client):
         data={'email': 'jhsmit25@colby.edu', 'password': 'jordan'},
         follow_redirects=True
     )
-
-
     response = test_client.post('/delete_box/982729', follow_redirects = True)
     assert response.status_code == 200
     assert b"Box not found" in response.data
