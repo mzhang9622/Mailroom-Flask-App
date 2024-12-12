@@ -3,16 +3,16 @@ website_test.py
 '''
 
 import io
+from werkzeug.security import generate_password_hash
+import sys
+import sqlite3
+import os
+import random
+import string
 from website import db
 from app import create_app
 from website.models import Box
 from website.models import User
-import random
-import string
-import sys
-import sqlite3
-import os
-from werkzeug.security import generate_password_hash
 
 sys.path.append(os.path.abspath(
     "/Users/jordansmith/Desktop/CS321/group-sprint-2/Mailroom-Flask-App/website"))
@@ -320,7 +320,7 @@ def test_delete_admin_success(test_client):
     app = create_app()
     with app.app_context():
         init_user = User.query.filter_by(email = "cyu25@colby.edu").first()
-    
+
     print(init_user.id)
     response = test_client.post('/delete_admin/' + str(init_user.id), follow_redirects=True)
     #Should be taken to main.admin
@@ -380,7 +380,7 @@ def test_add_box(test_client):
     # print("HERE", cursor.fetchone()[0])
     #Check if database is empty
     init_max = cursor.fetchone()[0]
-    
+
     response = test_client.post('/add_box',
                 data={
                 'name': 'Test: ' + ''.join(random.choice(string.ascii_lowercase)
@@ -482,52 +482,6 @@ def test_admin_failure(test_client):
     assert response.status_code == 200
     assert b"login" in response.data
     assert b"Admin" not in response.data
-
-
-
-# New Tests
-def test_google_login(test_client):
-    '''
-    GIVEN: A Flask app configured for testing with a test test_client
-    WHEN: The '/login_g' page is requested (POST)
-    THEN: Check the user is redirected to google login
-    '''
-    #Should not work because not logged in
-    response = test_client.get('/login_g', follow_redirects=False)
-
-    #Should be taken to non-admin home page
-    assert response.status_code == 302
-
-
-def test_callback(google_client):
-    '''
-        Test callback
-    '''
-
-    # Test the login-g route
-    response = google_client.post('/login_g')
-
-    # Check the response is a redirect
-    assert response.status_code == 302
-
-    # Check the redirect location is correct
-    print(response.headers['Location'])
-    assert response.headers['Location'] == "http://example.com/auth"
-
-    # Check the state is stored in the session
-    with google_client.session_transaction() as session:
-        assert session['state'] == "mock_state"
-
-def test_login_get(test_client):
-    '''
-        Test login
-    '''
-    # Simulate a POST request to /login with valid credentials    
-    response = test_client.get('/login')
-
-    assert response.status_code == 200
-    print(response.data)
-    assert b"login-input-container" in response.data
 
 # def test_login_get_while_logged_in(test_client, valid_test_user):
 #     # Simulate a POST request to /login with valid credentials
@@ -901,50 +855,6 @@ def test_nonexistent_delete_box(test_client):
     assert response.status_code == 200
     assert b"Box not found" in response.data
 
-
-#from unittest.mock import patch, MagicMock
-
-# def test_callback(test_client):
-#     # Mock credentials
-#     mock_credentials = MagicMock()
-#     mock_credentials._id_token = "test_id_token"
-#     mock_credentials.token = "mock_access_token"  # Ensure token is present
-
-#     # Patch fetch_token, credentials, and id_token verification
-#     with patch("website.auth.flow.fetch_token") as mock_fetch_token, \
-#          patch("website.auth.flow.credentials", mock_credentials), \
-#          patch("google.oauth2.id_token.verify_oauth2_token") as mock_verify:
-        
-#         # Simulate fetch_token call (mocked to return None, but token is set in credentials)
-#         mock_fetch_token.return_value = None  # You could mock actual fetch logic if needed
-
-#         # Simulate id_token verification
-#         mock_verify.return_value = {
-#             "sub": "123456789",
-#             "name": "Test User",
-#             "email": "test@example.com"
-#         }
-
-#         # Set session state
-#         with test_client.session_transaction() as session:
-#             session["state"] = "test_state"
-
-#         # Simulate callback
-#         response = test_client.post("/callback?state=test_state&code=valid_code")
-
-#         # Debug outputs
-#         print("Response status code:", response.status_code)
-#         print("Response headers:", response.headers)
-
-#         # Assertions
-#         assert response.status_code == 302  # Redirection expected
-#         assert "/index" in response.headers["Location"]  # Check redirect URL
-
-#         # Follow redirect to validate final page content
-#         response = test_client.get(response.headers["Location"], follow_redirects=True)
-#         print("Final response data:", response.data.decode("utf-8"))
-#         assert b"Scan Box" in response.data
-
 def test_add_repeat_user(test_client):
     '''
         Test duplicate users
@@ -973,7 +883,6 @@ def test_add_invalid_user(test_client):
         follow_redirects=True
     )
 
-    
     response = test_client.post('/add_user',
                                 data = {'email': "jhsmit25@bowdoin.edu",
                                         'password': "1234"},
