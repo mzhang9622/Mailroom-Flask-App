@@ -484,6 +484,9 @@ def test_admin_failure(test_client):
     assert b"Admin" not in response.data
 
 def test_login_get(test_client):
+    '''
+    Test Login
+    '''
     # Simulate a POST request to /login with valid credentials    
     response = test_client.get('/login')
 
@@ -876,7 +879,7 @@ def test_add_repeat_user(test_client):
         follow_redirects=True
     )
 
-    
+
     response = test_client.post('/add_user',
                                 data = {'email': "jhsmit25@colby.edu",
                                         'password': "random"},
