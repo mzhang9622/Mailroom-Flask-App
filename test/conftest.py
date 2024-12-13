@@ -5,11 +5,10 @@ conftest.py
 import os
 import sys
 import pytest
-from website import create_app
-from website import models
-
 sys.path.append(os.path.abspath(
     "/Users/jordansmith/Desktop/CS321/group-sprint-2/Mailroom-Flask-App"))
+from website import create_app
+from website import models
 
 print("")
 print(sys.path)
