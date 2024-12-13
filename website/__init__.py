@@ -12,7 +12,7 @@ load_dotenv()
 
 db = SQLAlchemy()
 
-def create_app(): 
+def create_app():
     '''
     Create App
     '''
@@ -35,7 +35,7 @@ def create_app():
     from .models import User
     from .views import main_blueprint
     from .auth import auth_blueprint
-    
+
     @login_manager.user_loader
     def load_user(user_id):
         '''
