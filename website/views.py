@@ -102,26 +102,23 @@ def add_box():
         if Box.query.filter_by(name = name).first():
             flash('ERROR: Box name already exists in database!', 'error')
             return redirect(url_for('main.index'))
-        
         if Box.query.filter_by(barcode = barcode).first():
             flash('ERROR: Barcode already exists in database!', 'error')
             return redirect(url_for('main.index'))
-        
         if int(quantity) < 0:
             flash('ERROR: Box count cannot be negative!', 'error')
             return redirect(url_for('main.index'))
-        
         if int(low_stock) < 0:
             flash('ERROR: Low stock number cannot be negative!', 'error')
             return redirect(url_for('main.index'))
-        
+
         box = Box(name = name, quantity = quantity, size = size, link = link,
                 image = image.filename, low_stock = low_stock, barcode = barcode)
         db.session.add(box)
         db.session.commit()
 
     return redirect(url_for('main.index'))
-    
+
 @main_blueprint.route('/update_box/<int:box_id>', methods=['POST'])
 @login_required
 def update_box(box_id):
@@ -180,7 +177,7 @@ def update_size(box_id):
     db.session.commit()
 
     return jsonify({'success': True, 'new_size': box.size})
-    
+
 @main_blueprint.route('/update_link/<int:box_id>', methods=['POST'])
 @login_required
 def update_link(box_id):
@@ -218,7 +215,7 @@ def update_low_stock(box_id):
         return jsonify({'success': True, 'new_low_stock': box.low_stock})
     except ValueError:
         return jsonify({'success': False, 'message': 'Invalid low stock value'})
-    
+
 @main_blueprint.route('/update_barcode/<int:box_id>', methods=['POST'])
 @login_required
 def update_barcode(box_id):
@@ -232,7 +229,7 @@ def update_barcode(box_id):
     barcode = request.json.get('barcode', 0)
     if Box.query.filter_by(barcode = barcode).first():
         return jsonify({'success': False, 'message': 'Barcode must be unique!'})
-    
+
     box.barcode = barcode
     db.session.commit()
 
@@ -250,7 +247,6 @@ def scan_box():
         if not Box.query.filter_by(barcode = barcode).first():
             flash('ERROR: Barcode does not exist in database!', 'error')
             return redirect(url_for('main.index'))
-        
         box = Box.query.filter_by(barcode = barcode).first()
         box.quantity -= 1
         box.quantity = max(box.quantity, 0)
