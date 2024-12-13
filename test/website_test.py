@@ -292,7 +292,7 @@ def test_delete_box(test_client):
             # image.save("static/images/" + image.filename)
             low_stock = 0
             barcode = "delete_test"
-            box = Box(id = 1, name = name, quantity = quantity, size = size, link = link,
+            box = Box(id = 5, name = name, quantity = quantity, size = size, link = link,
                     image = image, low_stock = low_stock, barcode = barcode)
             db.session.add(box)
             db.session.commit()
@@ -300,10 +300,10 @@ def test_delete_box(test_client):
     #Does not work because database has been temporarily wiped
     # with app.app_context():
     #     init_name = Box.query.get(1).name
-    response = test_client.post('/delete_box/1', follow_redirects=True)
+    response = test_client.post('/delete_box/5', follow_redirects=True)
     assert response.status_code == 200
     with app.app_context():
-        assert Box.query.get(1) is None
+        assert Box.query.get(5) is None
 
 def test_delete_admin_success(test_client):
     '''
@@ -317,9 +317,17 @@ def test_delete_admin_success(test_client):
             follow_redirects=True
         )
 
+    response = test_client.post('/add_user',
+                data={
+                'email': "delete@colby.edu",
+                'password': "delete"
+                },
+            follow_redirects=True
+        )
+
     app = create_app()
     with app.app_context():
-        init_user = User.query.filter_by(email = "cyu25@colby.edu").first()
+        init_user = User.query.filter_by(email = "delete@colby.edu").first()
 
     print(init_user.id)
     response = test_client.post('/delete_admin/' + str(init_user.id), follow_redirects=True)
